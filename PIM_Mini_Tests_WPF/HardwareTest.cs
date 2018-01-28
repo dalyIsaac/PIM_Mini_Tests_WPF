@@ -11,28 +11,28 @@ namespace PIM_Mini_Tests_WPF
 {
     public class HardwareTest : AssertionDefinitions
     {
-        public ObservableCollection<MethodInfo> TestMethods { get; }
-        public string Caption { get; set; }
+        public ObservableCollection<Method> TestMethods { get; }
+        public string Name { get; set; }
 
         public HardwareTest()
         {
             var testMethods = this.GetType().GetMethods().ToList()
                  .Where(x => x.Name.StartsWith("Test"));
-            TestMethods = new ObservableCollection<MethodInfo>(testMethods);
+            TestMethods = new ObservableCollection<Method>(testMethods.Select(x => new Method(x)));
         }
 
         /// <summary>
         /// Runs all the methods in this class which begin with "test"
         /// </summary>
         /// <returns>Test failure, and the error message if it did fail</returns>
-        public IEnumerable<(bool, string)> RunTests(List<MethodInfo> methods)
+        public IEnumerable<(bool, string)> RunTests(List<Method> methods)
         {
             foreach (var method in methods)
             {
                 Exception ex = null;
                 try
                 {
-                    method.Invoke(this, null);
+                    method.MethodData.Invoke(this, null);
                 }
                 catch (Exception localException)
                 {
@@ -58,7 +58,7 @@ namespace PIM_Mini_Tests_WPF
         /// <returns>User selection</returns>
         public bool GetUserInput(string message)
         {
-            MessageBoxResult response = MessageBox.Show(message, Caption, MessageBoxButton.YesNo);
+            MessageBoxResult response = MessageBox.Show(message, Name, MessageBoxButton.YesNo);
             if (response == MessageBoxResult.Yes)
                 return true;
             return false;

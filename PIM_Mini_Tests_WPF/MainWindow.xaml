@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PIM_Mini_Tests_WPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -18,8 +18,21 @@
             <Button x:Name="DeselectAll" Content="Deselect all" Margin="4" Padding="8 0"/>
         </StackPanel>
 
-        <TreeView x:Name="TestList" Grid.Row="1">
-            
+        <TreeView x:Name="TestTreeView" Grid.Row="1">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:HardwareTest}" ItemsSource="{Binding TestMethods}">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Checked="Class_Checked" Unchecked="Class_Unchecked" Margin="4 0"/>
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type local:Method}">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Checked="TestMethod_Checked" Unchecked="TestMethod_Unchecked" Margin="4 0"/>
+                        <TextBlock Text="{Binding MethodData.Name}" />
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
         </TreeView>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal">

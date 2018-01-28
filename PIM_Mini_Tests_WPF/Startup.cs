@@ -10,7 +10,7 @@ namespace PIM_Mini_Tests_WPF
     {
         public Startup() : base()
         {
-            Caption = "Startup Tests";
+            Name = "Startup Tests";
         }
         
         public void TestColdStart()
