@@ -34,5 +34,21 @@ namespace PIM_Mini_Tests_WPF
             this.tree.ItemsSource = this.tests;
             this.tree.Focus();
         }
+
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var test in this.tests)
+            {
+                test.IsChecked = true;
+            }
+        }
+
+        private void UnselectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var test in this.tests)
+            {
+                test.IsChecked = false;
+            }
+        }
     }
 }

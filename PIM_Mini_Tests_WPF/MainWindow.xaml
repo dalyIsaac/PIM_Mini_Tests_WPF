@@ -33,9 +33,16 @@
         <ObjectDataProvider MethodName="CreateFoos" ObjectType="{x:Type local:HardwareTest}" />
     </Window.DataContext>
 
-    <DockPanel>
-        <Button DockPanel.Dock="Bottom" Command="Undo" Content="Uncheck All" HorizontalAlignment="Center" Margin="0,2" Padding="8,0"/>
-        <TreeView x:Name="tree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}"/>
-    </DockPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Button Click="SelectAll_Click" Content="Select All" Width="80"/>
+            <Button Click="UnselectAll_Click" Content="Unselect All" Width="80"/>
+        </StackPanel>
+        <TreeView x:Name="tree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1"/>
+    </Grid>
    
 </Window>
