@@ -9,14 +9,13 @@ using System.Windows;
 
 namespace PIM_Mini_Tests_WPF
 {
-    public enum Status { Passed, Failed, NotRun, Mixed }
-
     public abstract class HardwareTest : INotifyPropertyChanged
     {
         private bool? _isChecked = false;
         private Status _testStatus = Status.NotRun;
         private HardwareTest _parent;
         private Visibility _outputVisibility = Visibility.Collapsed;
+        private string _errorMessage;
 
         public ObservableCollection<HardwareTest> Children { get; private set; }
         public bool IsInitiallySelected { get; private set; }
@@ -96,9 +95,54 @@ namespace PIM_Mini_Tests_WPF
         {
             if (this._parent != null)
             {
-                this._parent.TestStatus = testStatus;
+                if (this._parent.TestStatus == Status.Mixed || testStatus == Status.Mixed)
+                    this._parent.TestStatus = Status.Mixed;
+                else if (this._parent.TestStatus == Status.NotRun || testStatus == Status.NotRun)
+                    this._parent.TestStatus = testStatus != Status.NotRun ? testStatus : this._parent.TestStatus;
+                else if (this._parent.TestStatus == testStatus) { }
+                else
+                    this._parent.TestStatus = Status.Mixed;
             }
             this._testStatus = testStatus;
+            this.OnPropertyChanged("TestStatus");
+        }
+
+        public string ErrorMessage
+        {
+            get { return this._errorMessage; }
+            set { this.SetErrorMessage(value); }
+        }
+
+        private void SetErrorMessage(string message)
+        {
+            this._errorMessage = message;
+            this.OnPropertyChanged("ErrorMessage");
+            if (this._parent != null)
+            {
+                if (this._parent.ErrorMessage == null || this._parent.ErrorMessage == "")
+                {
+                    this._parent.ErrorMessage = $"{this.Name}: {message}";
+                }
+                else
+                {
+                    this._parent.ErrorMessage += $"\n{this.Name}: {message}";
+                }
+            }
+        }
+
+        /// <summary>
+        /// Sets the test status of the test and all it's children to NotRun
+        /// </summary>
+        public void ResetTestData()
+        {
+            this._testStatus = Status.NotRun;
+            this.OnPropertyChanged("TestStatus");
+            this._errorMessage = "";
+            this.OnPropertyChanged("ErrorMessage");
+            foreach (var child in this.Children)
+            {
+                child.ResetTestData();
+            }
         }
 
         public Visibility OutputVisibility

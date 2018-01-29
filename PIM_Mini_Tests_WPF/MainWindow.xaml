@@ -159,7 +159,7 @@
                         <Label Content="{Binding TestStatus, Mode=TwoWay, Converter={StaticResource statusToString}}" VerticalAlignment="Center" FontWeight="Bold" Foreground="{Binding TestStatus, Mode=TwoWay, Converter={StaticResource statusToColor}}"/>
                     </StackPanel>
                     <Button Content="↓" Grid.Column="2" Width="20" HorizontalAlignment="Right" Margin="4" Background="White" Click="ErrorOutput_Click"/>
-                    <TextBox Text="Hello, world!" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0" HorizontalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" Visibility="{Binding OutputVisibility, Mode=TwoWay}"/>
+                    <TextBox Text="{Binding ErrorMessage}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0" HorizontalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" Visibility="{Binding OutputVisibility, Mode=TwoWay}"/>
                 </Grid>
             </HierarchicalDataTemplate>
         </ResourceDictionary>
@@ -173,12 +173,14 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="28"/>
             <RowDefinition />
+            <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="4">
             <Button Click="SelectAll_Click" Content="Select All" Width="80"/>
             <Button Click="UnselectAll_Click" Content="Unselect All" Width="80" Margin="4 0 0 0"/>
         </StackPanel>
         <TreeView x:Name="tree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
+        <Button Content="Run tests" Margin="4" Width="80" Grid.Row="2" HorizontalAlignment="Left" Click="RunTests_Click"/>
     </Grid>
 
 </Window>

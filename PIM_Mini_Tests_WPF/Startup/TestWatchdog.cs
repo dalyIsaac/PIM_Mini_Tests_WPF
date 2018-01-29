@@ -11,8 +11,19 @@ namespace PIM_Mini_Tests_WPF.Startup
         public TestWatchDog() : base("Watchdog") { }
         public override void Test()
         {
-            bool status = this.GetUserInput("Can the device successfully perform a warm startup?");
-            this.AssertEqual(status, true, "The device did not succesfully perform a warm startup");
+            if ((bool)this.IsChecked)
+            {
+                bool status = this.GetUserInput("Is the watchdog performing as expected?");
+                if (status)
+                {
+                    this.TestStatus = Status.Passed;
+                }
+                else
+                {
+                    this.TestStatus = Status.Failed;
+                    this.ErrorMessage = "The watchdog was not performing as expected";
+                }
+            }
         }
     }
 }

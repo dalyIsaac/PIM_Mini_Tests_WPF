@@ -11,8 +11,19 @@ namespace PIM_Mini_Tests_WPF.Startup
         public TestColdStart() : base("Cold Start") { }
         public override void Test()
         {
-            bool status = this.GetUserInput("Can the device successfully perform a cold startup?");
-            this.AssertEqual(status, true, "The device did not succesfully perform a cold startup");
+            if ((bool)this.IsChecked)
+            {
+                bool status = this.GetUserInput("Can the device successfully perform a cold startup?");
+                if (status)
+                {
+                    this.TestStatus = Status.Passed;
+                }
+                else
+                {
+                    this.TestStatus = Status.Failed;
+                    this.ErrorMessage = "The device did not succesfully perform a cold startup";
+                }
+            }
         }
     }
 }

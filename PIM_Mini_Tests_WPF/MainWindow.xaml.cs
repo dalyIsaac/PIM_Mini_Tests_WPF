@@ -66,5 +66,17 @@ namespace PIM_Mini_Tests_WPF
                 dataContext.OutputVisibility = Visibility.Collapsed;
             }
         }
+
+        private void RunTests_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var test in this.tests)
+            {
+                test.ResetTestData();
+            }
+            foreach (var test in this.tests)
+            {
+                test.Test();
+            }
+        }
     }
 }
