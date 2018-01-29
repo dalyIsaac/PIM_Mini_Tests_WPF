@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,46 +21,61 @@ namespace PIM_Mini_Tests_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        public ObservableCollection<HardwareTest> TestList { get; set; }
+        private ObservableCollection<HardwareTest> tests;
 
         public MainWindow()
         {
-            TestList = new ObservableCollection<HardwareTest>
-            {
-                new Startup()
-            };
             InitializeComponent();
-            TestTreeView.DataContext = TestList;
-            TestTreeView.ItemsSource = TestList;
-        }
-
-        private void TestMethod_Checked(object sender, RoutedEventArgs e)
-        {
-            Method senderMethod = (Method)((CheckBox)sender).DataContext;
-            senderMethod.IsSelected = true;
-        }
-
-        private void TestMethod_Unchecked(object sender, RoutedEventArgs e)
-        {
-            Method senderMethod = (Method)((CheckBox)sender).DataContext;
-            senderMethod.IsSelected = false;
-        }
-
-        private void Class_Checked(object sender, RoutedEventArgs e)
-        {
-            HardwareTest senderClass = (HardwareTest)((CheckBox)sender).DataContext;
-            foreach (var method in senderClass.TestMethods)
+            tests = new ObservableCollection<HardwareTest>()
             {
-                method.IsSelected = true;
+                new Startup.Startup()
+            };
+            this.tree.DataContext = this.tests;
+            this.tree.ItemsSource = this.tests;
+            this.tree.Focus();
+        }
+
+        private void SelectAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var test in this.tests)
+            {
+                test.IsChecked = true;
             }
         }
 
-        private void Class_Unchecked(object sender, RoutedEventArgs e)
+        private void UnselectAll_Click(object sender, RoutedEventArgs e)
         {
-            HardwareTest senderClass = (HardwareTest)((CheckBox)sender).DataContext;
-            foreach (var method in senderClass.TestMethods)
+            foreach (var test in this.tests)
             {
-                method.IsSelected = false;
+                test.IsChecked = false;
+            }
+        }
+
+        private void ErrorOutput_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var dataContext = (HardwareTest)button.DataContext;
+            if ((string)button.Content == "↓")
+            {
+                button.Content = "↑";
+                dataContext.OutputVisibility = Visibility.Visible;
+            }
+            else
+            {
+                button.Content = "↓";
+                dataContext.OutputVisibility = Visibility.Collapsed;
+            }
+        }
+
+        private void RunTests_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var test in this.tests)
+            {
+                test.ResetTestData();
+            }
+            foreach (var test in this.tests)
+            {
+                test.Test();
             }
         }
     }
