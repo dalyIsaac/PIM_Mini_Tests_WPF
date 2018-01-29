@@ -1,53 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace PIM_Mini_Tests_WPF
 {
-    public class HardwareTest : AssertionDefinitions
+    public enum Status { Passed, Failed, NotRun, Mixed }
+
+    public abstract class HardwareTest : INotifyPropertyChanged
     {
-        public ObservableCollection<Method> TestMethods { get; }
+        private bool? _isChecked = false;
+        private Status _testStatus = Status.NotRun;
+        private HardwareTest _parent;
+
+        public ObservableCollection<HardwareTest> Children { get; private set; }
+        public bool IsInitiallySelected { get; private set; }
         public string Name { get; set; }
 
-        public HardwareTest()
+        public HardwareTest(string name, HardwareTest[] children = null)
         {
-            var testMethods = this.GetType().GetMethods().ToList()
-                 .Where(x => x.Name.StartsWith("Test"));
-            TestMethods = new ObservableCollection<Method>(testMethods.Select(x => new Method(x)));
+            this.Name = name;
+            this.Children = children == null ? new ObservableCollection<HardwareTest>() : new ObservableCollection<HardwareTest>(children);
+            this.Initialize();
+        }
+
+        private void Initialize()
+        {
+            foreach (var child in this.Children)
+            {
+                child._parent = this;
+                child.Initialize();
+            }
+        }
+
+        public bool? IsChecked
+        {
+            get { return this._isChecked; }
+            set { this.SetIsChecked(value, true, true); }
+        }
+
+        private void SetIsChecked(bool? value, bool updateChildren, bool updateParent)
+        {
+            if (value == this._isChecked)
+                return;
+
+            _isChecked = value;
+
+            if (updateChildren && this._isChecked.HasValue)
+            {
+                foreach (var child in this.Children)
+                {
+                    child.SetIsChecked(_isChecked, true, false);
+                }
+            }
+
+            if (updateParent && this._parent != null)
+            {
+                this._parent.VerifyCheckState();
+            }
+
+            this.OnPropertyChanged("IsChecked");
+        }
+
+        private void VerifyCheckState()
+        {
+            bool? state = null;
+            for (int i = 0; i < this.Children.Count; ++i)
+            {
+                bool? current = this.Children[i].IsChecked;
+                if (i == 0)
+                {
+                    state = current;
+                }
+                else if (state != current)
+                {
+                    state = null;
+                    break;
+                }
+            }
+            this.SetIsChecked(state, false, true);
+        }
+
+        public Status TestStatus
+        {
+            get { return this._testStatus; }
+            set { this.SetTestStatus(value); }
+        }
+
+        private void SetTestStatus(Status testStatus)
+        {
+            if (this._parent != null)
+            {
+                this._parent.TestStatus = testStatus;
+            }
+            this._testStatus = testStatus;
         }
 
         /// <summary>
-        /// Runs all the methods in this class which begin with "test"
+        /// Executes a test. MUST ASSIGN A VALUE TO this.TestStatus
         /// </summary>
-        /// <returns>Test failure, and the error message if it did fail</returns>
-        public IEnumerable<(bool, string)> RunTests(List<Method> methods)
-        {
-            foreach (var method in methods)
-            {
-                Exception ex = null;
-                try
-                {
-                    method.MethodData.Invoke(this, null);
-                }
-                catch (Exception localException)
-                {
-                    ex = localException;
-                }
+        /// <returns></returns>
+        public abstract void Test();
 
-                if (ex != null)
-                {
-                    yield return (false, ex.Message);
-                }
-                else
-                {
-                    yield return (true, "");
-                }
-            }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string property)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
         }
 
         /// <summary>
@@ -63,5 +126,39 @@ namespace PIM_Mini_Tests_WPF
                 return true;
             return false;
         }
+
+        #region Assertions
+        /// <summary>
+        /// Asserts that two strings are equal. Throws an exception if they are not.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool AssertEqual(string val1, string val2, string message = "")
+        {
+            if (val1 != val2)
+            {
+                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+            }
+            return val1 == val2;
+        }
+
+        /// <summary>
+        /// Asserts that two bools are equal. Throws an exception if they are not.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public bool AssertEqual(bool val1, bool val2, string message = "")
+        {
+            if (val1 != val2)
+            {
+                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+            }
+            return val1 == val2;
+        }
+        #endregion
     }
 }
