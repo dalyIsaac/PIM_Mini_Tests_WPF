@@ -58,6 +58,8 @@
     <Compile Include="Startup\TestColdStart.cs" />
     <Compile Include="Startup\TestWarmStart.cs" />
     <Compile Include="Startup\TestWatchdog.cs" />
+    <Compile Include="StatusToColorConverter.cs" />
+    <Compile Include="StatusToStringConverter.cs" />
     <Compile Include="VirtualToggleButton.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

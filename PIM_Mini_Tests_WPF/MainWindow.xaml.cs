@@ -50,5 +50,21 @@ namespace PIM_Mini_Tests_WPF
                 test.IsChecked = false;
             }
         }
+
+        private void ErrorOutput_Click(object sender, RoutedEventArgs e)
+        {
+            var button = (Button)sender;
+            var dataContext = (HardwareTest)button.DataContext;
+            if ((string)button.Content == "↓")
+            {
+                button.Content = "↑";
+                dataContext.OutputVisibility = Visibility.Visible;
+            }
+            else
+            {
+                button.Content = "↓";
+                dataContext.OutputVisibility = Visibility.Collapsed;
+            }
+        }
     }
 }

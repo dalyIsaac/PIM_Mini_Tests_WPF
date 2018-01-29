@@ -16,6 +16,7 @@ namespace PIM_Mini_Tests_WPF
         private bool? _isChecked = false;
         private Status _testStatus = Status.NotRun;
         private HardwareTest _parent;
+        private Visibility _outputVisibility = Visibility.Collapsed;
 
         public ObservableCollection<HardwareTest> Children { get; private set; }
         public bool IsInitiallySelected { get; private set; }
@@ -98,6 +99,12 @@ namespace PIM_Mini_Tests_WPF
                 this._parent.TestStatus = testStatus;
             }
             this._testStatus = testStatus;
+        }
+
+        public Visibility OutputVisibility
+        {
+            get { return this._outputVisibility; }
+            set { this._outputVisibility = value; this.OnPropertyChanged("OutputVisibility");}
         }
 
         /// <summary>
