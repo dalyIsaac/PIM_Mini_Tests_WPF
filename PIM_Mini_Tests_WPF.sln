@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PIM_Mini_Tests_WPF", "PIM_Mini_Tests_WPF\PIM_Mini_Tests_WPF.csproj", "{10B2455E-AA59-4652-9751-074B8C72FA51}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aardvark", "aardvark\aardvark.csproj", "{35E76E7B-1426-4D51-B172-852D69804FA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{10B2455E-AA59-4652-9751-074B8C72FA51}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10B2455E-AA59-4652-9751-074B8C72FA51}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10B2455E-AA59-4652-9751-074B8C72FA51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{35E76E7B-1426-4D51-B172-852D69804FA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{35E76E7B-1426-4D51-B172-852D69804FA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{35E76E7B-1426-4D51-B172-852D69804FA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{35E76E7B-1426-4D51-B172-852D69804FA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
