@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("PIM_Mini_Tests_WPF")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("Production Software Limited")]
 [assembly: AssemblyProduct("PIM_Mini_Tests_WPF")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
