@@ -14,14 +14,9 @@ namespace PIM_Mini_Tests_WPF.Startup
             if ((bool)this.IsChecked)
             {
                 bool status = this.GetUserInput("Is the watchdog performing as expected?");
-                if (status)
+                if (this.AssertEqual(status, true, "The watchdog was not performing as expected"))
                 {
                     this.TestStatus = Status.Passed;
-                }
-                else
-                {
-                    this.TestStatus = Status.Failed;
-                    this.ErrorMessage = "The watchdog was not performing as expected";
                 }
             }
         }

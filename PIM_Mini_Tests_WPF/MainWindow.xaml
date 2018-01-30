@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PIM_Mini_Tests_WPF"
         xmlns:controls="clr-namespace:PIM_Mini_Tests_WPF.Controls"
+        xmlns:properties="clr-namespace:PIM_Mini_Tests_WPF.Properties"
         mc:Ignorable="d"
         Title="PIM Mini Tests">
 
@@ -152,7 +153,7 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                        <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center"/>
+                    <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
                         <!-- These elements are bound to a HardwareTest object. -->
                         <Label Content="{Binding Name, Mode=OneTime}" VerticalAlignment="Center" />
@@ -162,12 +163,20 @@
                     <TextBox Text="{Binding ErrorMessage}" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="4 0" HorizontalAlignment="Stretch" IsReadOnly="True" TextWrapping="Wrap" Visibility="{Binding OutputVisibility, Mode=TwoWay}"/>
                 </Grid>
             </HierarchicalDataTemplate>
+
+            <Style x:Key="Header" TargetType="{x:Type TextBlock}">
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="FontWeight" Value="Bold" />
+            </Style>
+            <Style x:Key="SettingsLabel" TargetType="{x:Type Label}">
+                <Setter Property="Width" Value="120" />
+            </Style>
+            <Style x:Key="SettingsTextBox" TargetType="{x:Type TextBox}">
+                <Setter Property="Width" Value="40" />
+                <Setter Property="Height" Value="18" />
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.DataContext>
-        <ObjectDataProvider MethodName="CreateFoos" ObjectType="{x:Type local:HardwareTest}" />
-    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
@@ -175,12 +184,41 @@
             <RowDefinition />
             <RowDefinition Height="28"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="200"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="4">
             <Button Click="SelectAll_Click" Content="Select All" Width="80"/>
             <Button Click="UnselectAll_Click" Content="Unselect All" Width="80" Margin="4 0 0 0"/>
         </StackPanel>
-        <TreeView x:Name="tree" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
-        <Button Content="Run tests" Margin="4" Width="80" Grid.Row="2" HorizontalAlignment="Left" Click="RunTests_Click"/>
+        <TreeView x:Name="tree" Grid.Column="0" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
+        <Button Content="Run tests" Margin="4" Width="80" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Click="RunTests_Click"/>
+
+        <StackPanel Grid.Column="1" Grid.RowSpan="3" Margin="4">
+            <TextBlock Text="EEPROM Settings" Style="{StaticResource Header}" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromPortNumber}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Page size: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromPageSize}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Slave address: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromSlaveAddress}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Bitrate: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromBitrate}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Number of pages: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromNumPages}"/>
+            </StackPanel>
+
+        </StackPanel>
     </Grid>
 
 </Window>

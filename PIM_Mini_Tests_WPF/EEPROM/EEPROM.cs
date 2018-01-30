@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PIM_Mini_Tests_WPF.Startup
+namespace PIM_Mini_Tests_WPF.EEPROM
 {
-    public class Startup : HardwareTest
+    public class EEPROM : HardwareTest
     {
-        public Startup() : base("Startup", new HardwareTest[] { new TestColdStart(), new TestWarmStart(), new TestWatchDog() })
+        public EEPROM() : base("EEPROM", new HardwareTest[] { new TestWriteReadMemory() })
         {
         }
 

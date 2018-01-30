@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace PIM_Mini_Tests_WPF
@@ -24,6 +20,7 @@ namespace PIM_Mini_Tests_WPF
         public HardwareTest(string name, HardwareTest[] children = null)
         {
             this.Name = name;
+            Log.Logger.Information($"Initializing {this.Name} instance");
             this.Children = children == null ? new ObservableCollection<HardwareTest>() : new ObservableCollection<HardwareTest>(children);
             this.Initialize();
         }
@@ -105,6 +102,17 @@ namespace PIM_Mini_Tests_WPF
             }
             this._testStatus = testStatus;
             this.OnPropertyChanged("TestStatus");
+            if (this.Children.Count == 0)
+            {
+                if (testStatus == Status.Passed)
+                {
+                    Log.Logger.Debug($"{this.Name} passed");
+                }
+                else if (testStatus == Status.Failed)
+                {
+                    Log.Logger.Fatal($"{this.Name} failed");
+                }
+            }
         }
 
         public string ErrorMessage
@@ -148,7 +156,7 @@ namespace PIM_Mini_Tests_WPF
         public Visibility OutputVisibility
         {
             get { return this._outputVisibility; }
-            set { this._outputVisibility = value; this.OnPropertyChanged("OutputVisibility");}
+            set { this._outputVisibility = value; this.OnPropertyChanged("OutputVisibility"); }
         }
 
         /// <summary>
@@ -156,6 +164,24 @@ namespace PIM_Mini_Tests_WPF
         /// </summary>
         /// <returns></returns>
         public abstract void Test();
+
+        /// <summary>
+        /// Starts the child tests.
+        /// </summary>
+        public void StartChildTests()
+        {
+            if (this.IsChecked != false)
+            {
+                Log.Logger.Information($"The child tests for the {this.Name} class are starting");
+                foreach (var child in this.Children)
+                {
+                    Log.Logger.Information($"Running {child.Name} test");
+                    child.Test();
+                    Log.Logger.Information($"{child.Name} test has finished executing");
+                }
+                Log.Logger.Information($"The child tests for the {this.Name} class have finished executing");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -173,42 +199,194 @@ namespace PIM_Mini_Tests_WPF
         public bool GetUserInput(string message)
         {
             MessageBoxResult response = MessageBox.Show(message, Name, MessageBoxButton.YesNo);
+            Log.Logger.Debug($"{message} {response}");
             if (response == MessageBoxResult.Yes)
                 return true;
             return false;
         }
 
         #region Assertions
+
         /// <summary>
-        /// Asserts that two strings are equal. Throws an exception if they are not.
+        /// Asserts that two strings are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
         /// </summary>
         /// <param name="val1"></param>
         /// <param name="val2"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public bool AssertEqual(string val1, string val2, string message = "")
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(string val1, string val2, string message)
         {
             if (val1 != val2)
             {
-                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return val1 == val2;
         }
 
         /// <summary>
-        /// Asserts that two bools are equal. Throws an exception if they are not.
+        /// Asserts that two bools are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
         /// </summary>
         /// <param name="val1"></param>
         /// <param name="val2"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public bool AssertEqual(bool val1, bool val2, string message = "")
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(bool val1, bool val2, string message)
         {
             if (val1 != val2)
             {
-                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return val1 == val2;
+        }
+
+        /// <summary>
+        /// Asserts that two integers are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(int val1, int val2, string message)
+        {
+            if (val1 != val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
+            }
+            return val1 == val2;
+        }
+
+
+        /// <summary>
+        /// Asserts that two byte arrays are equal in length and have identical contents.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="differentContents">Error message if the contents are different</param>
+        /// <param name="differentLength">Error message if the length is different</param>
+        /// <returns></returns>
+        public bool AssertEqual(byte[] val1, byte[] val2, string differentContents, string differentLength)
+        {
+            if (val1.Length != val2.Length)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = differentLength;
+                Log.Logger.Fatal($"{differentLength} : {val1}.Length != {val2}.Length");
+                return false;
+            }
+            for (int i = 0; i < val1.Length; i++)
+            {
+                if (val1[i] != val2[i])
+                {
+                    this.TestStatus = Status.Failed;
+                    this.ErrorMessage = differentContents;
+                    Log.Logger.Fatal($"{differentContents} : {val1} != {val2}");
+                    return false;
+                }
+            }
+            if (this.TestStatus != Status.Failed)
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Asserts that val1 is greater than or equal to val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertGreaterEqual(int val1, int val2, string message)
+        {
+            if (val1 < val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} < {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} >= {val2}");
+            }
+            return val1 >= val2;
+        }
+
+        /// <summary>
+        /// Asserts that val1 is greater than val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertGreater(int val1, int val2, string message)
+        {
+            if (val1 <= val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} <= {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} > {val2}");
+            }
+            return val1 > val2;
+        }
+
+
+        /// <summary>
+        /// Asserts that val1 is not equal to val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertNotEqual(int val1, int val2, string message)
+        {
+            if (val1 == val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} == {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} != {val2}");
+            }
+            return val1 != val2;
         }
         #endregion
     }
