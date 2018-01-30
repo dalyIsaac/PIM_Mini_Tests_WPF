@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -25,6 +26,12 @@ namespace PIM_Mini_Tests_WPF
 
         public MainWindow()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs\\PIM_Mini_Tests.log", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             InitializeComponent();
             tests = new ObservableCollection<HardwareTest>()
             {
@@ -75,7 +82,7 @@ namespace PIM_Mini_Tests_WPF
             }
             foreach (var test in this.tests)
             {
-                test.Test();
+                test.StartChildTests();
             }
         }
     }

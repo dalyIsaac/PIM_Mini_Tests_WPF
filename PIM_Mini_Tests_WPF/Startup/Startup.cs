@@ -15,13 +15,7 @@ namespace PIM_Mini_Tests_WPF.Startup
 
         public override void Test()
         {
-            if (this.IsChecked != false)
-            {
-                foreach (var child in this.Children)
-                {
-                    child.Test();
-                }
-            }
+            throw new NotImplementedException();
         }
     }
 }

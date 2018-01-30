@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Serilog;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace PIM_Mini_Tests_WPF
@@ -24,6 +20,7 @@ namespace PIM_Mini_Tests_WPF
         public HardwareTest(string name, HardwareTest[] children = null)
         {
             this.Name = name;
+            Log.Logger.Information($"Initializing {this.Name} instance");
             this.Children = children == null ? new ObservableCollection<HardwareTest>() : new ObservableCollection<HardwareTest>(children);
             this.Initialize();
         }
@@ -105,6 +102,17 @@ namespace PIM_Mini_Tests_WPF
             }
             this._testStatus = testStatus;
             this.OnPropertyChanged("TestStatus");
+            if (this.Children.Count == 0)
+            {
+                if (testStatus == Status.Passed)
+                {
+                    Log.Logger.Debug($"{this.Name} passed");
+                }
+                else if (testStatus == Status.Failed)
+                {
+                    Log.Logger.Fatal($"{this.Name} failed");
+                }
+            }
         }
 
         public string ErrorMessage
@@ -148,7 +156,7 @@ namespace PIM_Mini_Tests_WPF
         public Visibility OutputVisibility
         {
             get { return this._outputVisibility; }
-            set { this._outputVisibility = value; this.OnPropertyChanged("OutputVisibility");}
+            set { this._outputVisibility = value; this.OnPropertyChanged("OutputVisibility"); }
         }
 
         /// <summary>
@@ -156,6 +164,24 @@ namespace PIM_Mini_Tests_WPF
         /// </summary>
         /// <returns></returns>
         public abstract void Test();
+
+        /// <summary>
+        /// Starts the child tests.
+        /// </summary>
+        public void StartChildTests()
+        {
+            if (this.IsChecked != false)
+            {
+                Log.Logger.Information($"The child tests for the {this.Name} class are starting");
+                foreach (var child in this.Children)
+                {
+                    Log.Logger.Information($"Running {child.Name} test");
+                    child.Test();
+                    Log.Logger.Information($"{child.Name} test has finished executing");
+                }
+                Log.Logger.Information($"The child tests for the {this.Name} class have finished executing");
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -173,6 +199,7 @@ namespace PIM_Mini_Tests_WPF
         public bool GetUserInput(string message)
         {
             MessageBoxResult response = MessageBox.Show(message, Name, MessageBoxButton.YesNo);
+            Log.Logger.Debug($"{message} {response}");
             if (response == MessageBoxResult.Yes)
                 return true;
             return false;
@@ -195,6 +222,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return val1 == val2;
         }
@@ -214,6 +246,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return val1 == val2;
         }
@@ -233,6 +270,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return val1 == val2;
         }
@@ -254,6 +296,7 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = differentLength;
+                Log.Logger.Fatal($"{differentLength} : {val1}.Length != {val2}.Length");
                 return false;
             }
             for (int i = 0; i < val1.Length; i++)
@@ -262,8 +305,13 @@ namespace PIM_Mini_Tests_WPF
                 {
                     this.TestStatus = Status.Failed;
                     this.ErrorMessage = differentContents;
+                    Log.Logger.Fatal($"{differentContents} : {val1} != {val2}");
                     return false;
                 }
+            }
+            if (this.TestStatus != Status.Failed)
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
             }
             return true;
         }
@@ -283,6 +331,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} < {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} >= {val2}");
             }
             return val1 >= val2;
         }
@@ -302,6 +355,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} <= {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} > {val2}");
             }
             return val1 > val2;
         }
@@ -322,6 +380,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 this.TestStatus = Status.Failed;
                 this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} == {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} != {val2}");
             }
             return val1 != val2;
         }

@@ -152,7 +152,7 @@
                         <RowDefinition />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                        <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center"/>
+                    <CheckBox IsChecked="{Binding IsChecked}" VerticalAlignment="Center"/>
                     <StackPanel Orientation="Horizontal" Grid.Column="1">
                         <!-- These elements are bound to a HardwareTest object. -->
                         <Label Content="{Binding Name, Mode=OneTime}" VerticalAlignment="Center" />
@@ -164,10 +164,6 @@
             </HierarchicalDataTemplate>
         </ResourceDictionary>
     </Window.Resources>
-
-    <Window.DataContext>
-        <ObjectDataProvider MethodName="CreateFoos" ObjectType="{x:Type local:HardwareTest}" />
-    </Window.DataContext>
 
     <Grid>
         <Grid.RowDefinitions>
