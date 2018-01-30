@@ -57,6 +57,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EEPROM\EEPROM.cs" />
+    <Compile Include="EEPROM\TestWriteReadMemory.cs" />
     <Compile Include="Startup\Startup.cs" />
     <Compile Include="Startup\TestColdStart.cs" />
     <Compile Include="Startup\TestWarmStart.cs" />
@@ -99,13 +101,18 @@
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\aardvark\aardvark.csproj">
+      <Project>{35e76e7b-1426-4d51-b172-852d69804fa6}</Project>
+      <Name>aardvark</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

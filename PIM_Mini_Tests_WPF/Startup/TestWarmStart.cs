@@ -14,14 +14,9 @@ namespace PIM_Mini_Tests_WPF.Startup
             if ((bool)this.IsChecked)
             {
                 bool status = this.GetUserInput("Can the device successfully perform a warm startup?");
-                if (status)
+                if (this.AssertEqual(status, true, "The device did not succesfully perform a warm startup"))
                 {
                     this.TestStatus = Status.Passed;
-                }
-                else
-                {
-                    this.TestStatus = Status.Failed;
-                    this.ErrorMessage = "The device did not succesfully perform a warm startup";
                 }
             }
         }

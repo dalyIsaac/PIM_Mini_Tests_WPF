@@ -179,36 +179,151 @@ namespace PIM_Mini_Tests_WPF
         }
 
         #region Assertions
+
         /// <summary>
-        /// Asserts that two strings are equal. Throws an exception if they are not.
+        /// Asserts that two strings are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
         /// </summary>
         /// <param name="val1"></param>
         /// <param name="val2"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public bool AssertEqual(string val1, string val2, string message = "")
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(string val1, string val2, string message)
         {
             if (val1 != val2)
             {
-                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
             }
             return val1 == val2;
         }
 
         /// <summary>
-        /// Asserts that two bools are equal. Throws an exception if they are not.
+        /// Asserts that two bools are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
         /// </summary>
         /// <param name="val1"></param>
         /// <param name="val2"></param>
-        /// <param name="message"></param>
-        /// <returns></returns>
-        public bool AssertEqual(bool val1, bool val2, string message = "")
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(bool val1, bool val2, string message)
         {
             if (val1 != val2)
             {
-                throw new Exception($"{message}\n{val1} is not equal to {val2}");
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
             }
             return val1 == val2;
+        }
+
+        /// <summary>
+        /// Asserts that two integers are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(int val1, int val2, string message)
+        {
+            if (val1 != val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+            }
+            return val1 == val2;
+        }
+
+
+        /// <summary>
+        /// Asserts that two byte arrays are equal in length and have identical contents.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="differentContents">Error message if the contents are different</param>
+        /// <param name="differentLength">Error message if the length is different</param>
+        /// <returns></returns>
+        public bool AssertEqual(byte[] val1, byte[] val2, string differentContents, string differentLength)
+        {
+            if (val1.Length != val2.Length)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = differentLength;
+                return false;
+            }
+            for (int i = 0; i < val1.Length; i++)
+            {
+                if (val1[i] != val2[i])
+                {
+                    this.TestStatus = Status.Failed;
+                    this.ErrorMessage = differentContents;
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// Asserts that val1 is greater than or equal to val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertGreaterEqual(int val1, int val2, string message)
+        {
+            if (val1 < val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+            }
+            return val1 >= val2;
+        }
+
+        /// <summary>
+        /// Asserts that val1 is greater than val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertGreater(int val1, int val2, string message)
+        {
+            if (val1 <= val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+            }
+            return val1 > val2;
+        }
+
+
+        /// <summary>
+        /// Asserts that val1 is not equal to val2. 
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertNotEqual(int val1, int val2, string message)
+        {
+            if (val1 == val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+            }
+            return val1 != val2;
         }
         #endregion
     }
