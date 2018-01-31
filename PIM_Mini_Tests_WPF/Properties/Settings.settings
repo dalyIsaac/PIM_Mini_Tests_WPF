@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PIM_Mini_Tests_WPF.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="eepromPortNumber" Type="System.Int32" Scope="User">
+    <Setting Name="eepromPortNumber" Type="System.UInt16" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="eepromPageSize" Type="System.UInt16" Scope="User">
@@ -16,6 +16,9 @@
     </Setting>
     <Setting Name="eepromNumPages" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="loggingLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PIM_Mini_Tests.log</Value>
     </Setting>
   </Settings>
 </SettingsFile>

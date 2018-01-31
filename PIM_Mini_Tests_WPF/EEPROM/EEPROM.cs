@@ -9,9 +9,7 @@ namespace PIM_Mini_Tests_WPF.EEPROM
 {
     public class EEPROM : HardwareTest
     {
-        public EEPROM() : base("EEPROM", new HardwareTest[] { new TestWriteReadMemory() })
-        {
-        }
+        public EEPROM(string name = "EEPROM") : base(name, new HardwareTest[] { new TestPortReady(), new TestOpenClose(), new TestWriteReadMemory() }) { }
 
         public override void Test()
         {
