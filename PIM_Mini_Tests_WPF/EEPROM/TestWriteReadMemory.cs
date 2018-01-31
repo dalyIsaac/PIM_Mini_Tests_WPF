@@ -13,12 +13,16 @@ namespace PIM_Mini_Tests_WPF.EEPROM
         private ushort pageSize;
         private int numPages;
         private ushort slaveAddress;
+        private ushort port;
+        private int bitrate;
 
-        public TestWriteReadMemory() : base("Write Memory")
+        public TestWriteReadMemory() : base("Write and read memory")
         {
             this.pageSize = Properties.Settings.Default.eepromPageSize;
             this.numPages = Properties.Settings.Default.eepromNumPages;
             this.slaveAddress = Properties.Settings.Default.eepromSlaveAddress;
+            this.port = Properties.Settings.Default.eepromPortNumber;
+            this.bitrate = Properties.Settings.Default.eepromBitrate;
         }
 
         /// <summary>
@@ -78,15 +82,13 @@ namespace PIM_Mini_Tests_WPF.EEPROM
 
         public override void Test()
         {
-            int port = Properties.Settings.Default.eepromPortNumber;
-            int bitrate = Properties.Settings.Default.eepromBitrate;
-            this.handle = AardvarkApi.aa_open(port);
+            this.handle = AardvarkApi.aa_open(this.port);
             if (!this.AssertGreaterEqual(this.handle, 0, "The specified port number was invalid"))
                 return;
             AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_GPIO_I2C);
             AardvarkApi.aa_i2c_pullup(this.handle, AardvarkApi.AA_I2C_PULLUP_BOTH);
             AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_BOTH);
-            AardvarkApi.aa_i2c_bitrate(this.handle, bitrate);
+            AardvarkApi.aa_i2c_bitrate(this.handle, this.bitrate);
             AardvarkApi.aa_i2c_bus_timeout(this.handle, 10);  // timeout = 10ms
             for (int i = 0; i < 18; i += 2)
             {
