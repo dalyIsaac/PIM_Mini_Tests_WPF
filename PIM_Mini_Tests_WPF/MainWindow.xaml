@@ -193,10 +193,17 @@
             <Button Click="UnselectAll_Click" Content="Unselect All" Width="80" Margin="4 0 0 0"/>
         </StackPanel>
         <TreeView x:Name="tree" Grid.Column="0" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
-        <Button Content="Run tests" Margin="4" Width="80" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Left" Click="RunTests_Click"/>
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Margin="4">
+            <Button Content="Run tests" Width="80" HorizontalAlignment="Left" Click="RunTests_Click" Background="LightBlue"/>
+            <TextBlock x:Name="ErrorOutput" Margin="4 0 0 0" Foreground="Red" FontWeight="Medium" VerticalAlignment="Center" Text="Error output goes here" />
+            <!--<TextBlock Text="|" Margin="4 0 0 0"/>-->
+            <TextBlock Margin="4 0 0 0"  VerticalAlignment="Center" Text="Log location:" />
+            <TextBlock x:Name="LoggingLocation" Margin="4 0 0 0" Text="{Binding Source={x:Static properties:Settings.Default}, Path=loggingLocation}" VerticalAlignment="Center"/>
+            <Button x:Name="ChangeLoggingLocation" Margin="6 0 0 0" Content="Change logging location" Padding="12 0" Click="ChangeLoggingLocation_Click"/>
+        </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.RowSpan="3" Margin="4">
-            <TextBlock Text="EEPROM Settings" Style="{StaticResource Header}" />
+            <TextBlock Text="EEPROM" Style="{StaticResource Header}" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
                 <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromPortNumber}"/>

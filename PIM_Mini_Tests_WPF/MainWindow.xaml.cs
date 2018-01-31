@@ -29,7 +29,7 @@ namespace PIM_Mini_Tests_WPF
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
-                .WriteTo.File("logs\\PIM_Mini_Tests.log", rollingInterval: RollingInterval.Day)
+                .WriteTo.File(Properties.Settings.Default.loggingLocation, rollingInterval: RollingInterval.Day)
                 .CreateLogger();
 
             InitializeComponent();
@@ -83,6 +83,43 @@ namespace PIM_Mini_Tests_WPF
             foreach (var test in this.tests)
             {
                 test.StartChildTests();
+            }
+        }
+
+        /// <summary>
+        /// Selects the location for the logging locatino
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ChangeLoggingLocation_Click(object sender, RoutedEventArgs e)
+        {
+            var fileName = Properties.Settings.Default.loggingLocation;
+            string initialDirectory = "";
+            if (fileName.Contains("\\"))
+            {
+                var path = fileName.Split('\\');
+                fileName = path[path.Length - 1];
+                initialDirectory = String.Join("\\", path.Select(x => x != fileName));
+            }
+
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = fileName, // Default file name
+                DefaultExt = ".log", // Default file extension
+                Filter = "Log files (.log)|*.log" // Filter files by extension
+            };
+            if (initialDirectory != "")
+            {
+                dlg.InitialDirectory = initialDirectory;
+            }
+
+            // Show open file dialog box
+            bool? result = dlg.ShowDialog();
+
+            // Process open file dialog box results
+            if (result == true)
+            {
+                Properties.Settings.Default.loggingLocation = dlg.FileName;
             }
         }
     }
