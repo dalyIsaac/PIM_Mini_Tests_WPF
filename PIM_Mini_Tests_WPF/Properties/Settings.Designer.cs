@@ -26,9 +26,9 @@ namespace PIM_Mini_Tests_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int eepromPortNumber {
+        public ushort eepromPortNumber {
             get {
-                return ((int)(this["eepromPortNumber"]));
+                return ((ushort)(this["eepromPortNumber"]));
             }
             set {
                 this["eepromPortNumber"] = value;

@@ -35,7 +35,8 @@ namespace PIM_Mini_Tests_WPF
             InitializeComponent();
             tests = new ObservableCollection<HardwareTest>()
             {
-                new Startup.Startup()
+                new Startup.Startup(),
+                new EEPROM.EEPROM()
             };
             this.tree.DataContext = this.tests;
             this.tree.ItemsSource = this.tests;
