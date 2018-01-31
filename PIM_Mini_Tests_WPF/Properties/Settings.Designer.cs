@@ -82,5 +82,17 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["eepromNumPages"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PIM_Mini_Tests.log")]
+        public string loggingLocation {
+            get {
+                return ((string)(this["loggingLocation"]));
+            }
+            set {
+                this["loggingLocation"] = value;
+            }
+        }
     }
 }
