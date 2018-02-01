@@ -29,12 +29,12 @@ namespace PIM_Mini_Tests_WPF.Common
             // Find all the attached devices
             int count = AardvarkApi.aa_find_devices_ext(numElem, ports,
                                                         numElem, uniqueIds);
-            if (!this.AssertGreater(count, 0, "No Aardvark devices were found")) return;
+            if (!this.AssertGreater(count, 0, "No Aardvark devices were found.")) return;
 
             List<ushort> portNumbers = new List<ushort>(ports);
-            if (!this.AssertEqual(portNumbers.Contains(this.port), true, "The specified port was not detected")) return;
+            if (!this.AssertEqual(portNumbers.Contains(this.port), true, "The specified port was not detected.")) return;
             bool status = AardvarkExtensions.GetStatus(this.port);
-            if (!this.AssertEqual(status, false, "The specified port is not available")) return;
+            if (!this.AssertEqual(status, false, "The specified port is not available.")) return;
             this.TestStatus = Status.Passed;
         }
     }
