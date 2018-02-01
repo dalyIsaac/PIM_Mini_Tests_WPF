@@ -20,5 +20,23 @@
     <Setting Name="loggingLocation" Type="System.String" Scope="User">
       <Value Profile="(Default)">PIM_Mini_Tests.log</Value>
     </Setting>
+    <Setting Name="framPortNumber" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="framBitrate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="framInitialAddress" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">32768</Value>
+    </Setting>
+    <Setting Name="framNumAddress" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="framPolarity" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="framPageSize" Type="System.UInt16" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

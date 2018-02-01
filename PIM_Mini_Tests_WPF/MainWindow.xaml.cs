@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using PIM_Mini_Tests_WPF.Common;
 
 namespace PIM_Mini_Tests_WPF
 {
@@ -33,10 +34,12 @@ namespace PIM_Mini_Tests_WPF
                 .CreateLogger();
 
             InitializeComponent();
+
             tests = new ObservableCollection<HardwareTest>()
             {
                 new Startup.Startup(),
-                new EEPROM.EEPROM()
+                new EEPROM.EEPROM(),
+                new FRAM.FRAM()
             };
             this.tree.DataContext = this.tests;
             this.tree.ItemsSource = this.tests;
@@ -122,6 +125,11 @@ namespace PIM_Mini_Tests_WPF
             {
                 Properties.Settings.Default.loggingLocation = dlg.FileName;
             }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
     }
 }

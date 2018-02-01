@@ -4,15 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PIM_Mini_Tests_WPF"
+        xmlns:common="clr-namespace:PIM_Mini_Tests_WPF.Common"
         xmlns:controls="clr-namespace:PIM_Mini_Tests_WPF.Controls"
         xmlns:properties="clr-namespace:PIM_Mini_Tests_WPF.Properties"
         mc:Ignorable="d"
-        Title="PIM Mini Tests">
+        Title="PIM Mini Tests"
+        MinWidth="740"
+        MinHeight="300"
+        Closing="Window_Closing">
 
     <Window.Resources>
         <ResourceDictionary>
-            <local:StatusToStringConverter x:Key="statusToString" />
-            <local:StatusToColorConverter x:Key="statusToColor" />
+            <common:StatusToStringConverter x:Key="statusToString" />
+            <common:StatusToColorConverter x:Key="statusToColor" />
 
             <Style x:Key="TreeViewItemFocusVisual">
                 <Setter Property="Control.Template">
@@ -147,7 +151,7 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
                         <ColumnDefinition />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="40"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -169,10 +173,10 @@
                 <Setter Property="FontWeight" Value="Bold" />
             </Style>
             <Style x:Key="SettingsLabel" TargetType="{x:Type Label}">
-                <Setter Property="Width" Value="120" />
+                <Setter Property="Width" Value="152" />
             </Style>
             <Style x:Key="SettingsTextBox" TargetType="{x:Type TextBox}">
-                <Setter Property="Width" Value="40" />
+                <Setter Property="Width" Value="99" />
                 <Setter Property="Height" Value="18" />
             </Style>
         </ResourceDictionary>
@@ -186,17 +190,15 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="260"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" Margin="4">
             <Button Click="SelectAll_Click" Content="Select All" Width="80"/>
             <Button Click="UnselectAll_Click" Content="Unselect All" Width="80" Margin="4 0 0 0"/>
         </StackPanel>
         <TreeView x:Name="tree" Grid.Column="0" ItemContainerStyle="{StaticResource TreeViewItemStyle}" ItemsSource="{Binding Mode=OneTime}" ItemTemplate="{StaticResource CheckBoxItemTemplate}" Grid.Row="1" HorizontalContentAlignment="Stretch"/>
-        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Margin="4">
-            <Button Content="Run tests" Width="80" HorizontalAlignment="Left" Click="RunTests_Click" Background="LightBlue"/>
-            <TextBlock x:Name="ErrorOutput" Margin="4 0 0 0" Foreground="Red" FontWeight="Medium" VerticalAlignment="Center" Text="Error output goes here" />
-            <!--<TextBlock Text="|" Margin="4 0 0 0"/>-->
+        <StackPanel Orientation="Horizontal" Grid.Column="0" Grid.Row="2" Margin="4" Grid.ColumnSpan="2">
+            <Button Content="Run tests" Width="80" HorizontalAlignment="Left" Click="RunTests_Click" Background="LightGreen"/>
             <TextBlock Margin="4 0 0 0"  VerticalAlignment="Center" Text="Log location:" />
             <TextBlock x:Name="LoggingLocation" Margin="4 0 0 0" Text="{Binding Source={x:Static properties:Settings.Default}, Path=loggingLocation}" VerticalAlignment="Center"/>
             <Button x:Name="ChangeLoggingLocation" Margin="6 0 0 0" Content="Change logging location" Padding="12 0" Click="ChangeLoggingLocation_Click"/>
@@ -224,7 +226,38 @@
                 <Label Content="Number of pages: " Style="{StaticResource SettingsLabel}"/>
                 <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromNumPages}"/>
             </StackPanel>
-
+            <TextBlock Text="FRAM" Style="{StaticResource Header}" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framPortNumber}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Bitrate: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framBitrate}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Initial Address: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framInitialAddress}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Number of addresses: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framNumAddress}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Polarity: " Style="{StaticResource SettingsLabel}"/>
+                <ComboBox SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=framPolarity}">
+                    <ComboBoxItem>
+                        Rising/Falling
+                    </ComboBoxItem>
+                    <ComboBoxItem>
+                        Falling/Rising
+                    </ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Page size: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framPageSize}"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 
