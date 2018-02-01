@@ -45,10 +45,9 @@ namespace PIM_Mini_Tests_WPF.EEPROM
                 // I'm hoping that Aardvark will assemble the 7-bit slave address,
                 // as that's what I think the documentation says
                 var numBytesWritten = AardvarkApi.aa_i2c_write(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, dataOut);
-                if (!this.AssertGreater(numBytesWritten, 0, "No bytes were written to the device"))
-                    return;
-                if (!this.AssertEqual(numBytesWritten, this.pageSize + 1, "The number of bytes written to the device was different to the page size"))
-                    return;
+                if (!this.AssertNotEqual(numBytesWritten, (int)AardvarkStatus.AA_I2C_WRITE_ERROR, "There was an error reading the acknowledgment from the Aardvark adapter. This is most likely a result of a communication error..")) return;
+                if (!this.AssertGreater(numBytesWritten, 0, "No bytes were written to the device.")) return;
+                if (!this.AssertEqual(numBytesWritten, this.pageSize + 1, "The number of bytes written to the device was different to the page size.")) return;
             }
         }
 
@@ -65,10 +64,12 @@ namespace PIM_Mini_Tests_WPF.EEPROM
                 // I'm hoping that Aardvark will assemble the 7-bit slave address,
                 // as that's what I think the documentation says
                 int bytesWritten = AardvarkApi.aa_i2c_write(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, new byte[] { (byte)(i & 0xff) });
-                if (!this.AssertEqual(bytesWritten, this.pageSize, "The amount of bytes written was different to the expected amount")) return;
+                if (!this.AssertNotEqual(bytesWritten, (int)AardvarkStatus.AA_I2C_WRITE_ERROR, "There was an error reading the acknowledgment from the Aardvark adapter. This is most likely a result of a communication error..")) return;
+                if (!this.AssertEqual(bytesWritten, this.pageSize, "The amount of bytes written was different to the expected amount.")) return;
 
                 var dataIn = new byte[this.pageSize];
                 int count = AardvarkApi.aa_i2c_read(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, dataIn);
+                if (!this.AssertNotEqual(count, (int)AardvarkStatus.AA_I2C_READ_ERROR, "There was an error reading from the Aardvark adapter. This is most likely a result of a communication error..")) return;
 
                 var expected_input = new byte[this.pageSize];
                 for (int j = 0; j < expected_input.Length; j++)
@@ -85,28 +86,33 @@ namespace PIM_Mini_Tests_WPF.EEPROM
 
         public override void Test()
         {
-            if (!this.AssertGreater(this.handle, 0, "The specified port did not open")) return;
+            this.handle = AardvarkApi.aa_open(this.port);
+            if (!this.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_UNABLE_TO_OPEN, "The specified port is not connected to an Aardvark device or the port is already in use.")) return;
+            if (!this.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "There is a version mismatch between the DLL and the firmware. The DLL is not of a sufficient version for interoperability with the firmware version or vice versa..")) return;
 
             var handleConfig = AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_GPIO_I2C);
-            if (!this.AssertEqual(handleConfig, (int)AardvarkConfig.AA_CONFIG_GPIO_I2C, "The Aardvark adapter could not be set so that the SPI pins are configured as GPIO pins, and enable I2C.")) return;
+            if (!this.AssertNotEqual(handleConfig, (int)AardvarkStatus.AA_CONFIG_ERROR, "The I2C or SPI subsystem is currently active and the new configuration requires the subsystem to be deactivated..")) return;
+            if (!this.AssertEqual(handleConfig, (int)AardvarkConfig.AA_CONFIG_GPIO_I2C, "The Aardvark adapter could not be set so that the SPI pins are configured as GPIO pins, and enable I2C..")) return;
 
             var i2cPullupResistors = AardvarkApi.aa_i2c_pullup(this.handle, AardvarkApi.AA_I2C_PULLUP_BOTH);
-            if (!this.AssertEqual(i2cPullupResistors, (int)AardvarkApi.AA_I2C_PULLUP_BOTH, "The Aardvark adapter could not be set so that the SCL/SDA pull-resistors are enabled.")) return;
+            if (!this.AssertNotEqual(i2cPullupResistors, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "The hardware version is not compatible with this feature. Only hardware versions 2.00 or greater support switchable pull-up resistors pins.")) return;
+            if (!this.AssertEqual(i2cPullupResistors, (int)AardvarkApi.AA_I2C_PULLUP_BOTH, "The Aardvark adapter could not be set so that the SCL/SDA pull-resistors are enabled..")) return;
 
             var powerStatus = AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_BOTH);
-            if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_BOTH, powerStatus, "The Aardvark adapter could not be set to enable the target power pins")) return;
+            if (!this.AssertNotEqual(powerStatus, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "The hardware version is not compatible with this feature. Only hardware versions 2.00 or greater support switchable target power pins..")) return;
+            if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_BOTH, powerStatus, "The Aardvark adapter could not be set to enable the target power pins.")) return;
 
             var bitrate = AardvarkApi.aa_i2c_bitrate(this.handle, this.bitrate);
-            if (!this.AssertEqual(bitrate, this.bitrate, "The bitrate for the Aardvark adapter could not be set")) return;
+            if (!this.AssertEqual(bitrate, this.bitrate, "The bitrate for the Aardvark adapter could not be set.")) return;
 
             var busTimeOut = AardvarkApi.aa_i2c_bus_timeout(this.handle, 10);
-            if (!this.AssertEqual(busTimeOut, 10, "The bus timeout for the Aardvark adapter could not be set")) return;
+            if (!this.AssertEqual(busTimeOut, 10, "The bus timeout for the Aardvark adapter could not be set.")) return;
 
             bool status = AardvarkExtensions.GetStatus(this.port);
-            if (!this.AssertEqual(status, false, "The specified port is not available")) return;
+            if (!this.AssertEqual(status, false, "The specified port is not available.")) return;
 
             var numClosed = AardvarkApi.aa_close(this.handle);
-            if (!this.AssertEqual(numClosed, 1, "An incorrect number of Aardvark adapters was closed")) return;
+            if (!this.AssertEqual(numClosed, 1, "An incorrect number of Aardvark adapters was closed.")) return;
 
             for (int i = 0; i < 18; i += 2)
             {
