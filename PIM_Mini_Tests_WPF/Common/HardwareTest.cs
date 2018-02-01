@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 
-namespace PIM_Mini_Tests_WPF
+namespace PIM_Mini_Tests_WPF.Common
 {
     public abstract class HardwareTest : INotifyPropertyChanged
     {

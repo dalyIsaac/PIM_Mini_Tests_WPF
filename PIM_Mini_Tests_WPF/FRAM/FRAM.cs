@@ -4,13 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TotalPhase;
 using PIM_Mini_Tests_WPF.Common;
 
-namespace PIM_Mini_Tests_WPF.Startup
+namespace PIM_Mini_Tests_WPF.FRAM
 {
-    public class Startup : HardwareTest
+    public class FRAM : HardwareTest
     {
-        public Startup() : base("Startup", new HardwareTest[] { new TestColdStart(), new TestWarmStart(), new TestWatchDog() }) { }
+        public FRAM(string name = "FRAM") : base(name, new HardwareTest[] { new TestPortReady(), new TestOpenClose(), new TestWriteReadSingle(), new TestWriteReadOverflow() }) { }
 
         public override void Test()
         {

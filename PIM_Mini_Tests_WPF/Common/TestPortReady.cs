@@ -4,22 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TotalPhase;
+using PIM_Mini_Tests_WPF.Common;
 
-namespace PIM_Mini_Tests_WPF.EEPROM
+namespace PIM_Mini_Tests_WPF.Common
 {
     public class TestPortReady : HardwareTest
     {
-        private ushort pageSize;
-        private int numPages;
-        private ushort slaveAddress;
         private ushort port;
 
         public TestPortReady() : base("Port ready")
         {
-            this.pageSize = Properties.Settings.Default.eepromPageSize;
-            this.numPages = Properties.Settings.Default.eepromNumPages;
-            this.slaveAddress = Properties.Settings.Default.eepromSlaveAddress;
-            this.port = Properties.Settings.Default.eepromPortNumber;
+            this.port = Properties.Settings.Default.framPortNumber;
         }
 
         /// <summary>

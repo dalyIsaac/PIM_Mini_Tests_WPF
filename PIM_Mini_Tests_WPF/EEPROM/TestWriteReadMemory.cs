@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TotalPhase;
+using PIM_Mini_Tests_WPF.Common;
 
 namespace PIM_Mini_Tests_WPF.EEPROM
 {
