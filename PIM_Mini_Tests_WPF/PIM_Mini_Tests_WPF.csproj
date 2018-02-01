@@ -76,6 +76,7 @@
     <Compile Include="FRAM\TestWriteReadSingle.cs" />
     <Compile Include="FRAM\FRAM.cs" />
     <Compile Include="RTC\RTC.cs" />
+    <Compile Include="RTC\TestSetSecond.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Startup\Startup.cs" />
     <Compile Include="Startup\TestColdStart.cs" />
@@ -116,6 +117,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

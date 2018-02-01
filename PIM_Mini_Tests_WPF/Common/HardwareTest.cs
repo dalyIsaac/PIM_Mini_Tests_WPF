@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
@@ -333,10 +334,72 @@ namespace PIM_Mini_Tests_WPF.Common
                     return false;
                 }
             }
-            if (this.TestStatus != Status.Failed)
+            Log.Logger.Debug($"Success : {val1} == {val2}");
+            return true;
+        }
+
+        /// <summary>
+        /// Asserts that two DateTime objects are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns></returns>
+        public bool AssertEqual(DateTime val1, DateTime val2, string message)
+        {
+            if (val1.Year != val2.Year)
             {
-                Log.Logger.Debug($"Success : {val1} == {val2}");
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Year != {val2}.Year");
+                return false;
             }
+            if (val1.Month != val2.Month)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Month != {val2}.Month");
+                return false;
+            }
+            if (val1.Day != val2.Day)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Day != {val2}.Day");
+                return false;
+            }
+            if (val1.DayOfWeek != val2.DayOfWeek)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.DayOfWeek != {val2}.DayOfWeek");
+                return false;
+            }
+            if (val1.Hour != val2.Hour)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Hour != {val2}.Hour");
+                return false;
+            }
+            if (val1.Minute != val2.Minute)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Minute != {val2}.Minute");
+                return false;
+            }
+            if (val1.Second != val2.Second)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1}.Second != {val2}.Second");
+                return false;
+            }
+
+            Log.Logger.Debug($"Success : {val1} == {val2}");
             return true;
         }
 
