@@ -279,6 +279,30 @@ namespace PIM_Mini_Tests_WPF.Common
             return val1 == val2;
         }
 
+        /// <summary>
+        /// Asserts that two integers are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(uint val1, uint val2, string message)
+        {
+            if (val1 != val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
+            }
+            return val1 == val2;
+        }
+
 
         /// <summary>
         /// Asserts that two byte arrays are equal in length and have identical contents.

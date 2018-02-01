@@ -166,5 +166,17 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["framPageSize"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort rtcPortNumber {
+            get {
+                return ((ushort)(this["rtcPortNumber"]));
+            }
+            set {
+                this["rtcPortNumber"] = value;
+            }
+        }
     }
 }

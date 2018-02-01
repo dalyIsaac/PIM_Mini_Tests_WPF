@@ -205,6 +205,8 @@
         </StackPanel>
 
         <StackPanel Grid.Column="1" Grid.RowSpan="3" Margin="4">
+            
+            <!--EEPROM-->
             <TextBlock Text="EEPROM" Style="{StaticResource Header}" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
@@ -226,6 +228,8 @@
                 <Label Content="Number of pages: " Style="{StaticResource SettingsLabel}"/>
                 <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromNumPages}"/>
             </StackPanel>
+            
+            <!--FRAM-->
             <TextBlock Text="FRAM" Style="{StaticResource Header}" />
             <StackPanel Orientation="Horizontal">
                 <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
@@ -257,6 +261,13 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Page size: " Style="{StaticResource SettingsLabel}"/>
                 <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framPageSize}"/>
+            </StackPanel>
+            
+            <!--RTC-->
+            <TextBlock Text="RTC" Style="{StaticResource Header}" />
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
+                <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcPortNumber}"/>
             </StackPanel>
         </StackPanel>
     </Grid>
