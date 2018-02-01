@@ -94,5 +94,77 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["loggingLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort framPortNumber {
+            get {
+                return ((ushort)(this["framPortNumber"]));
+            }
+            set {
+                this["framPortNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int framBitrate {
+            get {
+                return ((int)(this["framBitrate"]));
+            }
+            set {
+                this["framBitrate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("32768")]
+        public int framInitialAddress {
+            get {
+                return ((int)(this["framInitialAddress"]));
+            }
+            set {
+                this["framInitialAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int framNumAddress {
+            get {
+                return ((int)(this["framNumAddress"]));
+            }
+            set {
+                this["framNumAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int framPolarity {
+            get {
+                return ((int)(this["framPolarity"]));
+            }
+            set {
+                this["framPolarity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public ushort framPageSize {
+            get {
+                return ((ushort)(this["framPageSize"]));
+            }
+            set {
+                this["framPageSize"] = value;
+            }
+        }
     }
 }

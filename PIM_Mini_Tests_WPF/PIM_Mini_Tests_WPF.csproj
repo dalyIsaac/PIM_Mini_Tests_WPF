@@ -66,19 +66,24 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AardvarkExtensions.cs" />
+    <Compile Include="Common\AardvarkExtensions.cs" />
     <Compile Include="EEPROM\EEPROM.cs" />
     <Compile Include="EEPROM\TestOpenClose.cs" />
-    <Compile Include="EEPROM\TestPortReady.cs" />
     <Compile Include="EEPROM\TestWriteReadMemory.cs" />
+    <Compile Include="FRAM\TestOpenClose.cs" />
+    <Compile Include="Common\TestPortReady.cs" />
+    <Compile Include="FRAM\TestWriteReadOverflow.cs" />
+    <Compile Include="FRAM\TestWriteReadSingle.cs" />
+    <Compile Include="FRAM\FRAM.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="Startup\Startup.cs" />
     <Compile Include="Startup\TestColdStart.cs" />
     <Compile Include="Startup\TestWarmStart.cs" />
     <Compile Include="Startup\TestWatchdog.cs" />
-    <Compile Include="Status.cs" />
-    <Compile Include="StatusToColorConverter.cs" />
-    <Compile Include="StatusToStringConverter.cs" />
-    <Compile Include="VirtualToggleButton.cs" />
+    <Compile Include="Common\Status.cs" />
+    <Compile Include="Common\StatusToColorConverter.cs" />
+    <Compile Include="Common\StatusToStringConverter.cs" />
+    <Compile Include="Controls\VirtualToggleButton.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,7 +92,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HardwareTest.cs" />
+    <Compile Include="Common\HardwareTest.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -128,5 +133,6 @@
       <Name>aardvark</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
