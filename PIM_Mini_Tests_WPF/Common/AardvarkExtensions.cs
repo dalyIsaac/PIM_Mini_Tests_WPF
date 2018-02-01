@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TotalPhase;
 
-namespace PIM_Mini_Tests_WPF
+namespace PIM_Mini_Tests_WPF.Common
 {
     public static class AardvarkExtensions
     {

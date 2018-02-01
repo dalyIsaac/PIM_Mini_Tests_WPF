@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TotalPhase;
+using PIM_Mini_Tests_WPF.Common;
 
 namespace PIM_Mini_Tests_WPF.EEPROM
 {
@@ -16,7 +17,7 @@ namespace PIM_Mini_Tests_WPF.EEPROM
         private ushort port;
         private int bitrate;
 
-        public TestOpenClose() : base("Port ready")
+        public TestOpenClose() : base("Open/close")
         {
             this.pageSize = Properties.Settings.Default.eepromPageSize;
             this.numPages = Properties.Settings.Default.eepromNumPages;
@@ -40,7 +41,7 @@ namespace PIM_Mini_Tests_WPF.EEPROM
             if (!this.AssertEqual(i2cPullupResistors, (int)AardvarkApi.AA_I2C_PULLUP_BOTH, "The Aardvark adapter could not be set so that the SCL/SDA pull-resistors are enabled.")) return;
 
             var powerStatus = AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_BOTH);
-            if (!this.AssertEqual(this.handle, powerStatus, "The Aardvark adapter could not be set to enable the target power pins")) return;
+            if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_BOTH, powerStatus, "The Aardvark adapter could not be set to enable the target power pins")) return;
 
             var bitrate = AardvarkApi.aa_i2c_bitrate(this.handle, this.bitrate);
             if (!this.AssertEqual(bitrate, this.bitrate, "The bitrate for the Aardvark adapter could not be set")) return;

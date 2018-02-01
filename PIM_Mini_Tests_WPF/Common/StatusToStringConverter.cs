@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace PIM_Mini_Tests_WPF
+namespace PIM_Mini_Tests_WPF.Common
 {
     public class StatusToStringConverter : IValueConverter
     {
