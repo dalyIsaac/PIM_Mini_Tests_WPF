@@ -64,7 +64,9 @@ namespace PIM_Mini_Tests_WPF.EEPROM
             {
                 // I'm hoping that Aardvark will assemble the 7-bit slave address,
                 // as that's what I think the documentation says
-                AardvarkApi.aa_i2c_write(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, new byte[] { (byte)(i & 0xff) });
+                int bytesWritten = AardvarkApi.aa_i2c_write(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, new byte[] { (byte)(i & 0xff) });
+                if (!this.AssertEqual(bytesWritten, this.pageSize, "The amount of bytes written was different to the expected amount")) return;
+
                 var dataIn = new byte[this.pageSize];
                 int count = AardvarkApi.aa_i2c_read(this.handle, this.slaveAddress, AardvarkI2cFlags.AA_I2C_NO_FLAGS, this.pageSize, dataIn);
 
@@ -83,14 +85,29 @@ namespace PIM_Mini_Tests_WPF.EEPROM
 
         public override void Test()
         {
-            this.handle = AardvarkApi.aa_open(this.port);
-            if (!this.AssertGreaterEqual(this.handle, 0, "The specified port number was invalid"))
-                return;
-            AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_GPIO_I2C);
-            AardvarkApi.aa_i2c_pullup(this.handle, AardvarkApi.AA_I2C_PULLUP_BOTH);
-            AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_BOTH);
-            AardvarkApi.aa_i2c_bitrate(this.handle, this.bitrate);
-            AardvarkApi.aa_i2c_bus_timeout(this.handle, 10);  // timeout = 10ms
+            if (!this.AssertGreater(this.handle, 0, "The specified port did not open")) return;
+
+            var handleConfig = AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_GPIO_I2C);
+            if (!this.AssertEqual(handleConfig, (int)AardvarkConfig.AA_CONFIG_GPIO_I2C, "The Aardvark adapter could not be set so that the SPI pins are configured as GPIO pins, and enable I2C.")) return;
+
+            var i2cPullupResistors = AardvarkApi.aa_i2c_pullup(this.handle, AardvarkApi.AA_I2C_PULLUP_BOTH);
+            if (!this.AssertEqual(i2cPullupResistors, (int)AardvarkApi.AA_I2C_PULLUP_BOTH, "The Aardvark adapter could not be set so that the SCL/SDA pull-resistors are enabled.")) return;
+
+            var powerStatus = AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_BOTH);
+            if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_BOTH, powerStatus, "The Aardvark adapter could not be set to enable the target power pins")) return;
+
+            var bitrate = AardvarkApi.aa_i2c_bitrate(this.handle, this.bitrate);
+            if (!this.AssertEqual(bitrate, this.bitrate, "The bitrate for the Aardvark adapter could not be set")) return;
+
+            var busTimeOut = AardvarkApi.aa_i2c_bus_timeout(this.handle, 10);
+            if (!this.AssertEqual(busTimeOut, 10, "The bus timeout for the Aardvark adapter could not be set")) return;
+
+            bool status = AardvarkExtensions.GetStatus(this.port);
+            if (!this.AssertEqual(status, false, "The specified port is not available")) return;
+
+            var numClosed = AardvarkApi.aa_close(this.handle);
+            if (!this.AssertEqual(numClosed, 1, "An incorrect number of Aardvark adapters was closed")) return;
+
             for (int i = 0; i < 18; i += 2)
             {
                 this.WriteMemory(i);

@@ -40,10 +40,24 @@ namespace PIM_Mini_Tests_WPF.FRAM
         {
             this.handle = AardvarkApi.aa_open(this.portNumber);
             if (!this.AssertGreater(this.handle, 0, "The specified port did not open")) return;
-            AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_SPI_I2C);
-            AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_NONE);
-            AardvarkApi.aa_spi_configure(this.handle, (AardvarkSpiPolarity)(this.polarity >> 1), (AardvarkSpiPhase)(this.polarity & 1), AardvarkSpiBitorder.AA_SPI_BITORDER_MSB);
-            AardvarkApi.aa_spi_bitrate(this.handle, this.bitrate);
+
+            var handleConfig = AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_SPI_I2C);
+            if (!this.AssertEqual(handleConfig, (int)AardvarkConfig.AA_CONFIG_SPI_I2C, "The Aardvark adapter could not be set so that I2C and SPI are enabled, and GPIO is disabled")) return;
+
+            var powerStatus = AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_NONE);
+            if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_NONE, powerStatus, "The Aardvark adapter could not be set to disable the target power pins")) return;
+
+            var clockPhase = AardvarkApi.aa_spi_configure(this.handle, (AardvarkSpiPolarity)(polarity >> 1), (AardvarkSpiPhase)(polarity & 1), AardvarkSpiBitorder.AA_SPI_BITORDER_MSB);
+            if (!this.AssertEqual(clockPhase, (int)AardvarkStatus.AA_OK, "The SPI interface could not be configured")) return;
+
+            var bitrate = AardvarkApi.aa_spi_bitrate(this.handle, this.bitrate);
+            if (!this.AssertEqual(bitrate, this.bitrate, "The bitrate for the Aardvark adapter could not be set")) return;
+
+            var busTimeOut = AardvarkApi.aa_i2c_bus_timeout(this.handle, 10);
+            if (!this.AssertEqual(busTimeOut, 10, "The bus timeout for the Aardvark adapter could not be set")) return;
+
+            bool status = AardvarkExtensions.GetStatus(this.portNumber);
+            if (!this.AssertEqual(status, false, "The specified port is not available")) return;
         }
 
         /// <summary>
@@ -68,7 +82,8 @@ namespace PIM_Mini_Tests_WPF.FRAM
             while (count < size)
             {
                 // Send write enable command
-                AardvarkApi.aa_spi_write(this.handle, 1, new byte[] { 0x06 }, 0, new byte[0]);
+                int write = AardvarkApi.aa_spi_write(this.handle, 1, new byte[] { 0x06 }, 0, new byte[0]);
+                if (!this.AssertEqual(write, 1, "The number of bytes written does not match the expected amount")) return;
 
                 count += this.pageSize;
                 address += this.pageSize;
@@ -92,8 +107,11 @@ namespace PIM_Mini_Tests_WPF.FRAM
                 }
 
                 // Write the transaction
-                AardvarkApi.aa_spi_write(this.handle, (ushort)dataOut.Count, dataOut.ToArray(), 0, new byte[0]);
-                AardvarkApi.aa_sleep_ms(10);
+                write = AardvarkApi.aa_spi_write(this.handle, (ushort)dataOut.Count, dataOut.ToArray(), 0, new byte[0]);
+                if (!this.AssertEqual(write, 1, "The number of bytes written does not match the expected amount")) return;
+
+                uint sleep = AardvarkApi.aa_sleep_ms(10);
+                if (!this.AssertEqual(sleep, 10, "The amount of time the device slept for does not match the expected amount")) return;
             }
         }
 
@@ -147,7 +165,7 @@ namespace PIM_Mini_Tests_WPF.FRAM
                 var dataInList = new List<byte>(dataIn);
                 dataInList.RemoveRange(0, 3);
 
-                if (!this.AssertEqual(dataInList.ToArray(), expected_input, "The amount of data read from the FRAM did not match the expected amount","The data read from the FRAM did not match the expected data")) return;
+                if (!this.AssertEqual(dataInList.ToArray(), expected_input, "The amount of data read from the FRAM did not match the expected amount", "The data read from the FRAM did not match the expected data")) return;
             }
         }
 
@@ -160,6 +178,10 @@ namespace PIM_Mini_Tests_WPF.FRAM
             {
                 this.Write(i, this.initialAddress, this.numAddress);
                 this.Read(i, this.initialAddress, this.numAddress);
+            }
+            if (this.TestStatus != Status.Failed)
+            {
+                this.TestStatus = Status.Passed;
             }
         }
     }
