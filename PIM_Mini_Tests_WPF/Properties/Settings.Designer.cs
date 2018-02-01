@@ -178,5 +178,113 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["rtcPortNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcBitrate {
+            get {
+                return ((int)(this["rtcBitrate"]));
+            }
+            set {
+                this["rtcBitrate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcYearAddr {
+            get {
+                return ((int)(this["rtcYearAddr"]));
+            }
+            set {
+                this["rtcYearAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcMonthAddr {
+            get {
+                return ((int)(this["rtcMonthAddr"]));
+            }
+            set {
+                this["rtcMonthAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcDayOfMonth {
+            get {
+                return ((int)(this["rtcDayOfMonth"]));
+            }
+            set {
+                this["rtcDayOfMonth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcDayOfWeek {
+            get {
+                return ((int)(this["rtcDayOfWeek"]));
+            }
+            set {
+                this["rtcDayOfWeek"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcHours {
+            get {
+                return ((int)(this["rtcHours"]));
+            }
+            set {
+                this["rtcHours"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcMinutes {
+            get {
+                return ((int)(this["rtcMinutes"]));
+            }
+            set {
+                this["rtcMinutes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcSeconds {
+            get {
+                return ((int)(this["rtcSeconds"]));
+            }
+            set {
+                this["rtcSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcSlaveAddress {
+            get {
+                return ((int)(this["rtcSlaveAddress"]));
+            }
+            set {
+                this["rtcSlaveAddress"] = value;
+            }
+        }
     }
 }
