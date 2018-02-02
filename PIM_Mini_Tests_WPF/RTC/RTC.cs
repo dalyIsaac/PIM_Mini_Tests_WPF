@@ -70,9 +70,8 @@ namespace PIM_Mini_Tests_WPF.RTC
         /// Sets up the tests inside the FRAM namespace
         /// </summary>
         /// <returns></returns>
-        internal void SetUp(HardwareTest caller)
+        internal void SetUp()
         {
-            this.caller = caller;
             this.handle = AardvarkApi.aa_open(Properties.Settings.Default.rtcPortNumber);
             if (!this.caller.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_UNABLE_TO_OPEN, "The specified port is not connected to an Aardvark device or the port is already in use.")) return;
             if (!this.caller.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "There is a version mismatch between the DLL and the firmware. The DLL is not of a sufficient version for interoperability with the firmware version or vice versa.")) return;
@@ -96,7 +95,7 @@ namespace PIM_Mini_Tests_WPF.RTC
             if (!this.caller.AssertEqual(busTimeOut, 10, "The bus timeout for the Aardvark adapter could not be set.")) return;
         }
 
-        internal void TearDown(HardwareTest calle)
+        internal void TearDown()
         {
             var numClosed = AardvarkApi.aa_close(this.handle);
             if (!this.caller.AssertEqual(numClosed, 1, "An incorrect number of Aardvark adapters was closed.")) return;
@@ -112,17 +111,27 @@ namespace PIM_Mini_Tests_WPF.RTC
         /// <param name="this.caller">Caller class</param>
         /// <param name="data">The data which will be initially written to the RTC</param>
         /// <param name="delta">The time delta (seconds) after which the RTC will be checked</param>
-        internal void Check(ClockData data, int delta = 10)
+        internal void Check(HardwareTest caller, ClockData data, int delta = 10)
         {
+            this.caller = caller;
+            this.SetUp();
             DateTime formattedTime = ConvertClockDataToDateTime(data);
-            if (!this.caller.AssertEqual(data.DayOfWeek, ((int)formattedTime.DayOfWeek) + 1, "Internal software test error - specified day of week does not match the calculated day of week")) return;
+            if (!this.caller.AssertEqual(data.DayOfWeek, ((int)formattedTime.DayOfWeek) + 1, "Internal software test error - specified day of week does not match the calculated day of week"))
+            {
+                this.TearDown();
+                return;
+            }
             formattedTime.AddSeconds(delta);
 
             this.Write(data);
             System.Threading.Thread.Sleep(delta * 1000);
             var dataIn = this.Read();
 
-            if (!this.caller.AssertEqual(dataIn, formattedTime, "The time expected does not match the time of the RTC")) return;
+            if (!this.caller.AssertEqual(dataIn, formattedTime, "The time expected does not match the time of the RTC"))
+            {
+                this.TearDown();
+                return;
+            }
         }
 
         /// <summary>
