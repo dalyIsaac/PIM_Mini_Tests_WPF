@@ -178,5 +178,125 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["rtcPortNumber"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcBitrate {
+            get {
+                return ((int)(this["rtcBitrate"]));
+            }
+            set {
+                this["rtcBitrate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcYearAddr {
+            get {
+                return ((int)(this["rtcYearAddr"]));
+            }
+            set {
+                this["rtcYearAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcMonthAddr {
+            get {
+                return ((int)(this["rtcMonthAddr"]));
+            }
+            set {
+                this["rtcMonthAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcDayOfMonthAddr {
+            get {
+                return ((int)(this["rtcDayOfMonthAddr"]));
+            }
+            set {
+                this["rtcDayOfMonthAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcDayOfWeekAddr {
+            get {
+                return ((int)(this["rtcDayOfWeekAddr"]));
+            }
+            set {
+                this["rtcDayOfWeekAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcHoursAddr {
+            get {
+                return ((int)(this["rtcHoursAddr"]));
+            }
+            set {
+                this["rtcHoursAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcMinutesAddr {
+            get {
+                return ((int)(this["rtcMinutesAddr"]));
+            }
+            set {
+                this["rtcMinutesAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcSecondsAddr {
+            get {
+                return ((int)(this["rtcSecondsAddr"]));
+            }
+            set {
+                this["rtcSecondsAddr"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int rtcSlaveAddress {
+            get {
+                return ((int)(this["rtcSlaveAddress"]));
+            }
+            set {
+                this["rtcSlaveAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int rtcTimePeriod {
+            get {
+                return ((int)(this["rtcTimePeriod"]));
+            }
+            set {
+                this["rtcTimePeriod"] = value;
+            }
+        }
     }
 }
