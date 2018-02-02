@@ -10,7 +10,7 @@ namespace PIM_Mini_Tests_WPF.Common
     {
         private bool? _isChecked = false;
         private Status _testStatus = Status.NotRun;
-        private HardwareTest _parent;
+        public HardwareTest _parent;
         private Visibility _outputVisibility = Visibility.Collapsed;
         private string _errorMessage;
 

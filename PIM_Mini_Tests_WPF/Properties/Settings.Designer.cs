@@ -218,60 +218,60 @@ namespace PIM_Mini_Tests_WPF.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int rtcDayOfMonth {
+        public int rtcDayOfMonthAddr {
             get {
-                return ((int)(this["rtcDayOfMonth"]));
+                return ((int)(this["rtcDayOfMonthAddr"]));
             }
             set {
-                this["rtcDayOfMonth"] = value;
+                this["rtcDayOfMonthAddr"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int rtcDayOfWeek {
+        public int rtcDayOfWeekAddr {
             get {
-                return ((int)(this["rtcDayOfWeek"]));
+                return ((int)(this["rtcDayOfWeekAddr"]));
             }
             set {
-                this["rtcDayOfWeek"] = value;
+                this["rtcDayOfWeekAddr"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int rtcHours {
+        public int rtcHoursAddr {
             get {
-                return ((int)(this["rtcHours"]));
+                return ((int)(this["rtcHoursAddr"]));
             }
             set {
-                this["rtcHours"] = value;
+                this["rtcHoursAddr"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int rtcMinutes {
+        public int rtcMinutesAddr {
             get {
-                return ((int)(this["rtcMinutes"]));
+                return ((int)(this["rtcMinutesAddr"]));
             }
             set {
-                this["rtcMinutes"] = value;
+                this["rtcMinutesAddr"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int rtcSeconds {
+        public int rtcSecondsAddr {
             get {
-                return ((int)(this["rtcSeconds"]));
+                return ((int)(this["rtcSecondsAddr"]));
             }
             set {
-                this["rtcSeconds"] = value;
+                this["rtcSecondsAddr"] = value;
             }
         }
         
@@ -284,6 +284,18 @@ namespace PIM_Mini_Tests_WPF.Properties {
             }
             set {
                 this["rtcSlaveAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
+        public int rtcTimePeriod {
+            get {
+                return ((int)(this["rtcTimePeriod"]));
+            }
+            set {
+                this["rtcTimePeriod"] = value;
             }
         }
     }

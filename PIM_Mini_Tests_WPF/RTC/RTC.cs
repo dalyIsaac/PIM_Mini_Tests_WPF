@@ -24,7 +24,28 @@ namespace PIM_Mini_Tests_WPF.RTC
         private int yearAddr, monthAddr, dayOfWeekAddr, dayOfMonthAddr, hoursAddr, minutesAddr, secondsAddr;
         private HardwareTest caller;
 
-        public RTC() : base("RTC", new HardwareTest[] { new TestSetSecond() })
+        public RTC() :
+            base("RTC", new HardwareTest[]
+        {
+            new TestSetSecond(),
+            new TestSetSecondIncr(),
+            new TestSetMinute(),
+            new TestSetMinuteIncr(),
+            new TestSetHour(),
+             new TestSetHourIncr(),
+            new TestSetDay30(),
+            new TestSetDay31(),
+            new TestSetDay28(),
+            new TestLeapYearDiv4(),
+            new TestLeapYearDiv100(),
+            new TestLeapYearDiv400(),
+            new TestSetDayIncr(),
+            new TestSetMonth(),
+            new TestSetMonthIncr(),
+            new TestSetYear(),
+            new TestSetYearIncr(),
+            new TestPeriod()
+        })
         {
             this.pageSize = Properties.Settings.Default.eepromPageSize;
             this.numPages = Properties.Settings.Default.eepromNumPages;
@@ -33,11 +54,11 @@ namespace PIM_Mini_Tests_WPF.RTC
             this.bitrate = Properties.Settings.Default.eepromBitrate;
             this.yearAddr = Properties.Settings.Default.rtcYearAddr;
             this.monthAddr = Properties.Settings.Default.rtcMonthAddr;
-            this.dayOfWeekAddr = Properties.Settings.Default.rtcDayOfWeek;
-            this.dayOfMonthAddr = Properties.Settings.Default.rtcDayOfMonth;
-            this.hoursAddr = Properties.Settings.Default.rtcHours;
-            this.minutesAddr = Properties.Settings.Default.rtcMinutes;
-            this.secondsAddr = Properties.Settings.Default.rtcSeconds;
+            this.dayOfWeekAddr = Properties.Settings.Default.rtcDayOfWeekAddr;
+            this.dayOfMonthAddr = Properties.Settings.Default.rtcDayOfMonthAddr;
+            this.hoursAddr = Properties.Settings.Default.rtcHoursAddr;
+            this.minutesAddr = Properties.Settings.Default.rtcMinutesAddr;
+            this.secondsAddr = Properties.Settings.Default.rtcSecondsAddr;
         }
 
         public override void Test()
