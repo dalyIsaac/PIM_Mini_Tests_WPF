@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace PIM_Mini_Tests_WPF.RTC
 {
     /// <summary>
-    /// Checks that the seconds turn over the minute correctly
+    /// Checks that the months increment correctly
     /// </summary>
-    public class TestSetSecond : HardwareTest
+    public class TestSetMonthIncr : HardwareTest
     {
-        public TestSetSecond() : base("Checks that the seconds turn over the minute correctly")
+        public TestSetMonthIncr() : base("Checks that the months increment correctly")
         {
         }
 
@@ -21,11 +21,11 @@ namespace PIM_Mini_Tests_WPF.RTC
             ClockData data = new ClockData()
             {
                 Year = 2017,
-                Month= 12,
-                DayOfMonth= 8,
-                DayOfWeek= 5,
-                Hours = 14,
-                Minutes= 0,
+                Month = 8,
+                DayOfMonth = 31,
+                DayOfWeek = 4,
+                Hours = 23,
+                Minutes = 59,
                 Seconds = 55
             };
             RTC parent = this._parent as RTC;

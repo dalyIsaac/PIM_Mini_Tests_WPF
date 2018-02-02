@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace PIM_Mini_Tests_WPF.RTC
 {
     /// <summary>
-    /// Checks that the seconds turn over the minute correctly
+    /// Checks that the days turn over the month correctly for a valid leap year (div 4)
     /// </summary>
-    public class TestSetSecond : HardwareTest
+    public class TestLeapYearDiv4 : HardwareTest
     {
-        public TestSetSecond() : base("Checks that the seconds turn over the minute correctly")
+        public TestLeapYearDiv4() : base("Checks that the days turn over the month correctly for a valid leap year (div 4)")
         {
         }
 
@@ -20,12 +20,12 @@ namespace PIM_Mini_Tests_WPF.RTC
         {
             ClockData data = new ClockData()
             {
-                Year = 2017,
-                Month= 12,
-                DayOfMonth= 8,
-                DayOfWeek= 5,
-                Hours = 14,
-                Minutes= 0,
+                Year = 2004,
+                Month = 2,
+                DayOfMonth = 28,
+                DayOfWeek = 6,
+                Hours = 23,
+                Minutes = 59,
                 Seconds = 55
             };
             RTC parent = this._parent as RTC;
