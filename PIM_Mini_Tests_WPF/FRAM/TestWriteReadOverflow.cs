@@ -11,11 +11,6 @@ namespace PIM_Mini_Tests_WPF.FRAM
 {
     public class TestWriteReadOverflow : HardwareTest
     {
-        private int handle;
-        private ushort portNumber;
-        private int bitrate;
-        private int polarity;
-        private ushort pageSize;
         private int initialAddress;
         private int numAddress;
 
@@ -25,12 +20,8 @@ namespace PIM_Mini_Tests_WPF.FRAM
         /// <param name="name"></param>
         public TestWriteReadOverflow(string name = "Writes and then reads from every address with overflow") : base(name)
         {
-            this.portNumber = Properties.Settings.Default.framPortNumber;
-            this.pageSize = Properties.Settings.Default.framPageSize;
             this.initialAddress = Properties.Settings.Default.framInitialAddress;
             this.numAddress = Properties.Settings.Default.framNumAddress;
-            this.bitrate = Properties.Settings.Default.framBitrate;
-            this.polarity = Properties.Settings.Default.framPolarity;
         }
 
         /// <summary>
