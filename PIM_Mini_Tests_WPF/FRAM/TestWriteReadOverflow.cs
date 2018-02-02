@@ -40,14 +40,14 @@ namespace PIM_Mini_Tests_WPF.FRAM
         {
             this.handle = AardvarkApi.aa_open(this.portNumber);
             if (!this.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_UNABLE_TO_OPEN, "The specified port is not connected to an Aardvark device or the port is already in use.")) return;
-            if (!this.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "There is a version mismatch between the DLL and the firmware. The DLL is not of a sufficient version for interoperability with the firmware version or vice versa..")) return;
+            if (!this.AssertNotEqual(this.handle, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "There is a version mismatch between the DLL and the firmware. The DLL is not of a sufficient version for interoperability with the firmware version or vice versa.")) return;
 
             var handleConfig = AardvarkApi.aa_configure(this.handle, AardvarkConfig.AA_CONFIG_SPI_I2C);
-            if (!this.AssertNotEqual(handleConfig, (int)AardvarkStatus.AA_CONFIG_ERROR, "The I2C or SPI subsystem is currently active and the new configuration requires the subsystem to be deactivated..")) return;
+            if (!this.AssertNotEqual(handleConfig, (int)AardvarkStatus.AA_CONFIG_ERROR, "The I2C or SPI subsystem is currently active and the new configuration requires the subsystem to be deactivated.")) return;
             if (!this.AssertEqual(handleConfig, (int)AardvarkConfig.AA_CONFIG_SPI_I2C, "The Aardvark adapter could not be set so that I2C and SPI are enabled, and GPIO is disabled.")) return;
 
             var powerStatus = AardvarkApi.aa_target_power(this.handle, AardvarkApi.AA_TARGET_POWER_NONE);
-            if (!this.AssertNotEqual(powerStatus, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "The hardware version is not compatible with this feature. Only hardware versions 2.00 or greater support switchable target power pins..")) return;
+            if (!this.AssertNotEqual(powerStatus, (int)AardvarkStatus.AA_INCOMPATIBLE_DEVICE, "The hardware version is not compatible with this feature. Only hardware versions 2.00 or greater support switchable target power pins.")) return;
             if (!this.AssertEqual(AardvarkApi.AA_TARGET_POWER_NONE, powerStatus, "The Aardvark adapter could not be set to disable the target power pins.")) return;
 
             var clockPhase = AardvarkApi.aa_spi_configure(this.handle, (AardvarkSpiPolarity)(polarity >> 1), (AardvarkSpiPhase)(polarity & 1), AardvarkSpiBitorder.AA_SPI_BITORDER_MSB);
@@ -86,7 +86,7 @@ namespace PIM_Mini_Tests_WPF.FRAM
             {
                 // Send write enable command
                 int write = AardvarkApi.aa_spi_write(this.handle, 1, new byte[] { 0x06 }, 0, new byte[0]);
-                if (!this.AssertNotEqual(write, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB..")) return;
+                if (!this.AssertNotEqual(write, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB.")) return;
                 if (!this.AssertEqual(write, 1, "The number of bytes written does not match the expected amount.")) return;
 
                 count += this.pageSize;
@@ -112,7 +112,7 @@ namespace PIM_Mini_Tests_WPF.FRAM
 
                 // Write the transaction
                 write = AardvarkApi.aa_spi_write(this.handle, (ushort)dataOut.Count, dataOut.ToArray(), 0, new byte[0]);
-                if (!this.AssertNotEqual(write, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB..")) return;
+                if (!this.AssertNotEqual(write, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB.")) return;
                 if (!this.AssertEqual(write, 1, "The number of bytes written does not match the expected amount.")) return;
 
                 uint sleep = AardvarkApi.aa_sleep_ms(10);
@@ -159,7 +159,7 @@ namespace PIM_Mini_Tests_WPF.FRAM
 
                 // Write length+3 bytes for data plus command and 2 address bytes
                 count = AardvarkApi.aa_spi_write(this.handle, (ushort)dataOut.Count, dataOut.ToArray(), (ushort)dataIn.Length, dataIn.ToArray());
-                if (!this.AssertNotEqual(count, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB..")) return;
+                if (!this.AssertNotEqual(count, (int)AardvarkStatus.AA_SPI_WRITE_ERROR, "There was an error writing to the Aardvark adapter. This is most likely a result of a communication error. Make sure that out_num_bytes is less than 4 KiB.")) return;
                 if (!this.AssertGreaterEqual(count, 0, "No data was read from the slave.")) return;
                 if (!this.AssertEqual(count, size, "The amount of data read did not match the expected amount.")) return;
 
