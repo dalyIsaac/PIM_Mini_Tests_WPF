@@ -29,7 +29,7 @@ namespace PIM_Mini_Tests_WPF.RTC
                 Seconds = 0
             };
             RTC parent = this._parent as RTC;
-            parent.Check(data);
+            parent.Check(this, data, Properties.Settings.Default.rtcTimePeriod);
         }
     }
 }
