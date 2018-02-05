@@ -308,6 +308,21 @@
                     <Label Content="User specified time period: " Style="{StaticResource SettingsLabel}"/>
                     <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcTimePeriod, Mode=TwoWay, Converter={StaticResource sleepConverter}}" />
                 </StackPanel>
+
+                <!--SSH-->
+                <TextBlock Text="Target Settings" Style="{StaticResource Header}" />
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Address: " Style="{StaticResource SettingsLabel}"/>
+                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=targetAddress}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Username: " Style="{StaticResource SettingsLabel}"/>
+                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=sshUsername}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Password: " Style="{StaticResource SettingsLabel}"/>
+                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=sshPassword}"/>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
 

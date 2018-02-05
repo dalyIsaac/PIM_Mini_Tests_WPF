@@ -71,5 +71,14 @@
     <Setting Name="rtcTimePeriod" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">60</Value>
     </Setting>
+    <Setting Name="targetAddress" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.1.40</Value>
+    </Setting>
+    <Setting Name="sshPassword" Type="System.String" Scope="User">
+      <Value Profile="(Default)">root</Value>
+    </Setting>
+    <Setting Name="sshUsername" Type="System.String" Scope="User">
+      <Value Profile="(Default)">root</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
