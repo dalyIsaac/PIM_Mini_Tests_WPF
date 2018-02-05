@@ -1,8 +1,10 @@
 ﻿using Renci.SshNet;
 using Renci.SshNet.Common;
+using Serilog;
 using SimpleTCP;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -15,8 +17,9 @@ namespace PIM_Mini_Tests_WPF.Common
         public static bool IsDaemonStarted = false;
         internal readonly static int port = 1003;
 
-        public static DaemonReponse StartDaemon()
+        public static DaemonResponse StartDaemon()
         {
+            Log.Information("Setting up SSH connection to start the daemon.");
             var connectionInfo = new ConnectionInfo(
                 Properties.Settings.Default.targetAddress,
                 Properties.Settings.Default.sshUsername,
@@ -28,29 +31,37 @@ namespace PIM_Mini_Tests_WPF.Common
             {
                 try
                 {
+                    Log.Information("SSH connecting.");
                     client.Connect();
+                    Log.Information("SSH connected.");
                     var startCommand = client.CreateCommand("python /test/daemon.py");
                     startCommand.Execute();
+                    Log.Information("Start command sent and executed.");
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException ex)
                 {
-                    return DaemonReponse.ObjectDisposedException;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ObjectDisposedException;
                 }
-                catch (SocketException)
+                catch (SocketException ex)
                 {
-                    return DaemonReponse.SocketException;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SocketException;
                 }
-                catch (SshConnectionException)
+                catch (SshConnectionException ex)
                 {
-                    return DaemonReponse.SshConnectionException;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SshConnectionException;
                 }
-                catch (ProxyException)
+                catch (ProxyException ex)
                 {
-                    return DaemonReponse.ProxyException;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ProxyException;
                 }
-                catch (InvalidOperationException)
+                catch (InvalidOperationException ex)
                 {
-                    return DaemonReponse.InvalidOperationException;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.InvalidOperationException;
                 }
             }
 
@@ -58,39 +69,77 @@ namespace PIM_Mini_Tests_WPF.Common
             return Controller.SendTcpMessage(message);
         }
 
-        public static DaemonReponse KillDaemon()
+        public static DaemonResponse KillDaemon()
         {
             using (var client = new SimpleTcpClient().Connect(Properties.Settings.Default.targetAddress, Controller.port))
             {
+                Log.Information("Sending kill signal to the daemon.");
                 client.Delimiter = new byte();
                 var message = "die";
                 return Controller.SendTcpMessage(message);
             }
         }
 
-        internal static DaemonReponse SendTcpMessage(string message)
+        internal static DaemonResponse SendTcpMessage(string message)
         {
-            using (var client = new SimpleTcpClient().Connect(Properties.Settings.Default.targetAddress, Controller.port))
+            Log.Information("Starting TCP client");
+            using (var client = new TcpClient())
             {
-                client.Delimiter = new byte();
                 try
                 {
-                    var replyMsg = client.WriteLineAndGetReply(message, TimeSpan.FromSeconds(3));
-                    client.Disconnect();
-                    if (replyMsg.MessageString.Trim() == message)
+                    Log.Information("Connecting TCP client to the daemon.");
+                    client.Connect(Properties.Settings.Default.targetAddress, Controller.port);
+                    Log.Information("Connected");
+                    Stream dataStream = client.GetStream();
+
+                    ASCIIEncoding ascii = new ASCIIEncoding();
+                    byte[] messageOut = ascii.GetBytes(message);
+                    Log.Information($"Transmitting {messageOut}");
+                    dataStream.Write(messageOut, 0, messageOut.Length);
+                    Log.Information("Data transmitted");
+
+                    byte[] messageIn = new byte[100];
+                    int length = dataStream.Read(messageIn, 0, 100);
+                    string messageInStr = "";
+                    foreach (var item in messageIn)
                     {
-                        return DaemonReponse.Success;
+                        messageInStr += Convert.ToChar(item);
+                    }
+
+                    messageInStr = messageInStr.Trim();
+                    if (messageInStr == message)
+                    {
+                        return DaemonResponse.Success;
+                    }
+                    else
+                    {
+                        return DaemonResponse.IncorrectResponse;
                     }
                 }
-                catch (Exception)
+                catch (ArgumentNullException ex)
                 {
-                    return DaemonReponse.TcpClientFailure;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ArgumentNullException;
                 }
-                return DaemonReponse.Failure;
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ArgumentOutOfRangeException;
+                }
+                catch (SocketException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SocketException;
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ObjectDisposedException;
+                }
             }
         }
 
-        public static DaemonReponse StartTest(string test)
+        public static DaemonResponse StartTest(string test)
         {
             using (var client = new SimpleTcpClient().Connect(Properties.Settings.Default.targetAddress, Controller.port))
             {
@@ -117,29 +166,30 @@ namespace PIM_Mini_Tests_WPF.Common
 
                     if (counter >= 5 && received == false)
                     {
-                        return DaemonReponse.DaemonReceiveFailure; // couldn't receive get the ack after 5 tries
+                        return DaemonResponse.DaemonReceiveFailure; // couldn't receive get the ack after 5 tries
                     }
 
 
                 }
                 catch (Exception)
                 {
-                    return DaemonReponse.TcpClientFailure;
+                    return DaemonResponse.TcpClientFailure;
                 }
             }
         }
     }
 
-    public enum DaemonReponse
+    public enum DaemonResponse
     {
         Success,
-        Failure,
+        IncorrectResponse,
         InvalidOperationException,
         ObjectDisposedException,
         SocketException,
         SshConnectionException,
         ProxyException,
         ArgumentNullException,
+        ArgumentOutOfRangeException,
         TcpClientFailure,
         DaemonReceiveFailure
     }
