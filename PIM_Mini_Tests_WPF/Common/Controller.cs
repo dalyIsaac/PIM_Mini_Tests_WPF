@@ -4,7 +4,6 @@ using Serilog;
 using SimpleTCP;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -90,13 +89,26 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("Connecting TCP client to the daemon.");
                     client.Connect(Properties.Settings.Default.targetAddress, Controller.port);
                     Log.Information("Connected");
-                    Stream dataStream = client.GetStream();
+                    NetworkStream dataStream = client.GetStream();
 
                     ASCIIEncoding ascii = new ASCIIEncoding();
                     byte[] messageOut = ascii.GetBytes(message);
                     Log.Information($"Transmitting {messageOut}");
                     dataStream.Write(messageOut, 0, messageOut.Length);
                     Log.Information("Data transmitted");
+
+                    DateTime now = DateTime.Now;
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+
+                    while (!dataStream.DataAvailable)
+                    {
+                        if (now + waitTime < DateTime.Now)
+                        {
+                            Log.Fatal("The daemon took too long to respond.");
+                            client.Close();
+                            return DaemonResponse.TimeOut;
+                        }
+                    }
 
                     byte[] messageIn = new byte[100];
                     int length = dataStream.Read(messageIn, 0, 100);
@@ -139,41 +151,110 @@ namespace PIM_Mini_Tests_WPF.Common
             }
         }
 
+        /// <summary>
+        /// Starts a test via TCP, waits for a repeat of the command to be sent back, and waits for the result of the test.
+        /// </summary>
+        /// <param name="test">Name of the test</param>
+        /// <returns>The result of the test, or any errors which occured during execution</returns>
         public static DaemonResponse StartTest(string test)
         {
-            using (var client = new SimpleTcpClient().Connect(Properties.Settings.Default.targetAddress, Controller.port))
+            Log.Information("Starting TCP client");
+            using (var client = new TcpClient())
             {
-                client.Delimiter = new byte();
                 try
                 {
-                    bool received = false;
-                    int counter = 0;
+                    Log.Information("Connecting TCP client to the daemon.");
+                    client.Connect(Properties.Settings.Default.targetAddress, Controller.port);
+                    Log.Information("Connected");
+                    NetworkStream dataStream = client.GetStream();
 
-                    // Tries multiple times to get the message through
-                    while (!received && counter < 5)
+                    ASCIIEncoding ascii = new ASCIIEncoding();
+                    byte[] messageOut = ascii.GetBytes(test);
+                    Log.Information($"Transmitting {messageOut}");
+                    dataStream.Write(messageOut, 0, messageOut.Length);
+                    Log.Information("Data transmitted");
+
+                    DateTime now = DateTime.Now;
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+
+                    while (!dataStream.DataAvailable)
                     {
-                        var replyMsg = client.WriteLineAndGetReply(test, TimeSpan.FromSeconds(3));
-                        client.Disconnect();
-                        if (replyMsg.MessageString.Trim() != test)
+                        if (now + waitTime < DateTime.Now)
                         {
-                            counter += 1;
-                        }
-                        else
-                        {
-                            received = true;
+                            Log.Fatal("The daemon took too long to respond.");
+                            client.Close();
+                            return DaemonResponse.TimeOut;
                         }
                     }
 
-                    if (counter >= 5 && received == false)
+                    byte[] messageIn = new byte[100];
+                    int length = dataStream.Read(messageIn, 0, 100);
+                    string messageInStr = "";
+                    foreach (var item in messageIn)
                     {
-                        return DaemonResponse.DaemonReceiveFailure; // couldn't receive get the ack after 5 tries
+                        messageInStr += Convert.ToChar(item);
                     }
 
+                    messageInStr = messageInStr.Trim();
+                    if (messageInStr != test)
+                    {
+                        return DaemonResponse.IncorrectResponse;
+                    }
 
+                    now = DateTime.Now;
+                    waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    while (!dataStream.DataAvailable)
+                    {
+                        if (now + waitTime < DateTime.Now)
+                        {
+                            Log.Fatal("The daemon took too long to respond.");
+                            client.Close();
+                            return DaemonResponse.TimeOut;
+                        }
+                    }
+
+                    byte[] response = new byte[100];
+                    int responseLength = dataStream.Read(messageIn, 0, 100);
+                    string responseStr = "";
+                    foreach (var item in messageIn)
+                    {
+                        responseStr += Convert.ToChar(item);
+                    }
+
+                    responseStr = responseStr.Trim();
+
+                    switch (responseStr)
+                    {
+                        case "pin set":
+                            Log.Information("The pin was successfully set.");
+                            return DaemonResponse.PinSet;
+                        case "pin fail":
+                            Log.Fatal("The pin could not be set");
+                            return DaemonResponse.PinSetFailed;
+                        default:
+                            Log.Fatal($"Unknown response: {responseStr}");
+                            return DaemonResponse.IncorrectResponse;
+                    }
                 }
-                catch (Exception)
+                catch (ArgumentNullException ex)
                 {
-                    return DaemonResponse.TcpClientFailure;
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ArgumentNullException;
+                }
+                catch (ArgumentOutOfRangeException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ArgumentOutOfRangeException;
+                }
+                catch (SocketException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SocketException;
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ObjectDisposedException;
                 }
             }
         }
@@ -182,6 +263,8 @@ namespace PIM_Mini_Tests_WPF.Common
     public enum DaemonResponse
     {
         Success,
+        PinSet,
+        PinSetFailed,
         IncorrectResponse,
         InvalidOperationException,
         ObjectDisposedException,
@@ -191,6 +274,7 @@ namespace PIM_Mini_Tests_WPF.Common
         ArgumentNullException,
         ArgumentOutOfRangeException,
         TcpClientFailure,
-        DaemonReceiveFailure
+        DaemonReceiveFailure,
+        TimeOut
     }
 }
