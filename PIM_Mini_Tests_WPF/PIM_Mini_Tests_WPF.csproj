@@ -111,6 +111,10 @@
     <Compile Include="Common\StatusToColorConverter.cs" />
     <Compile Include="Common\StatusToStringConverter.cs" />
     <Compile Include="Controls\VirtualToggleButton.cs" />
+    <Compile Include="UserInputs\UserInputThree.cs" />
+    <Compile Include="UserInputs\UserInputTwo.cs" />
+    <Compile Include="UserInputs\UserInputOne.cs" />
+    <Compile Include="UserInputs\UserInputs.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
