@@ -12,13 +12,10 @@ namespace PIM_Mini_Tests_WPF.Startup
         public TestWarmStart() : base("Warm Start") { }
         public override void Test()
         {
-            if ((bool)this.IsChecked)
+            bool status = this.GetUserInput("Can the device successfully perform a warm startup?");
+            if (this.AssertEqual(status, true, "The device did not succesfully perform a warm startup"))
             {
-                bool status = this.GetUserInput("Can the device successfully perform a warm startup?");
-                if (this.AssertEqual(status, true, "The device did not succesfully perform a warm startup"))
-                {
-                    this.TestStatus = Status.Passed;
-                }
+                this.TestStatus = Status.Passed;
             }
         }
     }
