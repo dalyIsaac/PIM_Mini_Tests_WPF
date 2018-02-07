@@ -15,7 +15,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
 
         public override void Test()
         {
-            bool status = this.GetUserInput("Please turn on the device. Once the device is on, check if the device's POWER LED is on. Is the POWER LED on?");
+            bool status = this.GetUserInput("Please turn on the device. Once the device is on, check if the device's POWER LED is on.\nIs the POWER LED on?");
             if (!this.AssertEqual(status, true, "The POWER LED does not turn on when the device is on.")) return;
             this.TestStatus = Status.Passed;
         }
