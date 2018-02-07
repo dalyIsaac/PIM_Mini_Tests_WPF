@@ -9,7 +9,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
 {
     public class TestIedDataTx : HardwareTest
     {
-        public TestIedDataTx() : base("IED Ok")
+        public TestIedDataTx() : base("IED Data Tx")
         {
         }
 
