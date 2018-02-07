@@ -84,6 +84,7 @@
     <Compile Include="FRAM\FRAM.cs" />
     <Compile Include="LEDS\LEDS.cs" />
     <Compile Include="LEDS\TestPower.cs" />
+    <Compile Include="LEDS\TestWatchdog.cs" />
     <Compile Include="RTC\RTC.cs" />
     <Compile Include="RTC\SleepConverter.cs" />
     <Compile Include="RTC\TestSetDay28.cs" />
