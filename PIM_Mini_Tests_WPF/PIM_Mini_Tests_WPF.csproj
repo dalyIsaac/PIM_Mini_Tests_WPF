@@ -82,6 +82,16 @@
     <Compile Include="FRAM\TestWriteReadOverflow.cs" />
     <Compile Include="FRAM\TestWriteReadSingle.cs" />
     <Compile Include="FRAM\FRAM.cs" />
+    <Compile Include="LEDS\LEDS.cs" />
+    <Compile Include="LEDS\TestCcpDataRx.cs" />
+    <Compile Include="LEDS\TestCcpDataTx.cs" />
+    <Compile Include="LEDS\TestCcpOk.cs" />
+    <Compile Include="LEDS\TestFault.cs" />
+    <Compile Include="LEDS\TestIedDataRx.cs" />
+    <Compile Include="LEDS\TestIedDataTx.cs" />
+    <Compile Include="LEDS\TestIedOk.cs" />
+    <Compile Include="LEDS\TestPower.cs" />
+    <Compile Include="LEDS\TestWatchdog.cs" />
     <Compile Include="RTC\RTC.cs" />
     <Compile Include="RTC\SleepConverter.cs" />
     <Compile Include="RTC\TestSetDay28.cs" />
@@ -111,9 +121,9 @@
     <Compile Include="Common\StatusToColorConverter.cs" />
     <Compile Include="Common\StatusToStringConverter.cs" />
     <Compile Include="Controls\VirtualToggleButton.cs" />
-    <Compile Include="UserInputs\UserInputThree.cs" />
-    <Compile Include="UserInputs\UserInputTwo.cs" />
-    <Compile Include="UserInputs\UserInputOne.cs" />
+    <Compile Include="UserInputs\TestUserInputThree.cs" />
+    <Compile Include="UserInputs\TestUserInputTwo.cs" />
+    <Compile Include="UserInputs\TestUserInputOne.cs" />
     <Compile Include="UserInputs\UserInputs.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

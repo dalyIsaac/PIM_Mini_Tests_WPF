@@ -1,6 +1,6 @@
 """Tests that GPIO pins can be written to and read from"""
 
-from periphery import GPIO # pylint: disable=W0403
+from periphery import GPIO  # pylint: disable=W0403
 
 IN = "in"
 OUT = "out"
@@ -16,6 +16,7 @@ USER_INPUT_3 = GPIO(pin=0, direction=PRESERVE)
 
 class UserInputs(object):
     """Tests that values can be written and read from a GPIO pin"""
+
     def __init__(self):
         self.gpio = None
         if isinstance(self, UserInputOne):
@@ -27,15 +28,15 @@ class UserInputs(object):
 
     def test_high(self):
         """Tests that high values can be written and read from the GPIO pin"""
-        self.gpio.write(True)
-        if self.gpio.read() is True:
-            return True
-        return False
+        return self._test(True)
 
     def test_low(self):
         """Tests that low values can be written and read from the GPIO pin"""
-        self.gpio.write(False)
-        if self.gpio.read() is False:
+        return self._test(False)
+
+    def _test(self, level):
+        self.gpio.write(level)
+        if self.gpio.read() is level:
             return True
         return False
 
