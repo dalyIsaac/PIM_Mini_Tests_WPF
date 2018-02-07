@@ -9,7 +9,18 @@ namespace PIM_Mini_Tests_WPF.LEDS
 {
     public class LEDS : HardwareTest
     {
-        public LEDS() : base("LEDs", new HardwareTest[] { new TestPower(), new TestWatchdog(), new TestCcpOk() })
+        public LEDS() : base("LEDs", new HardwareTest[] 
+        {
+            new TestPower(),
+            new TestWatchdog(),
+            new TestCcpOk(),
+            new TestIedOk(),
+            new TestFault(),
+            new TestCcpDataTx(),
+            new TestCcpDataRx(),
+            new TestIedDataTx(),
+            new TestIedDataRx()
+        })
         {
         }
 
