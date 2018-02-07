@@ -147,7 +147,7 @@ class Daemon(object):
     def test_runner(self):
         """Listens over TCP, executes tests, and returns the results to the controller"""
         command = None
-        time_to_stop = datetime.now() + timedelta(minutes=5)
+        time_to_stop = datetime.now() + timedelta(minutes=2)
         while command != "stop" and time_to_stop > datetime.now():
             command = self.sock.recv(64) # TCP receives here
             self.sock.sendall(command.strip())
@@ -172,6 +172,7 @@ class Daemon(object):
                     result = user_input.test_low()
 
             self.sock.sendall(result)
+            time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
     def run(self):
