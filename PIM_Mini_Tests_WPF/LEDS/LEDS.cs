@@ -9,13 +9,53 @@ namespace PIM_Mini_Tests_WPF.LEDS
 {
     public class LEDS : HardwareTest
     {
-        public LEDS() : base("LEDs", new HardwareTest[] { new TestPower(), new TestWatchdog() })
+        public LEDS() : base("LEDs", new HardwareTest[] { new TestPower(), new TestWatchdog(), new TestCcpOk() })
         {
+        }
+
+
+        /// <summary>
+        /// Sets LEDs
+        /// </summary>
+        /// <param name="caller">The caller instance</param>
+        /// <param name="level">true is on, false is off</param>
+        /// <returns></returns>
+        internal void Check(HardwareTest caller)
+        {
+            var result = this.SetLED(caller, true);
+            if (result == DaemonResponse.Success)
+            {
+                bool userInput = caller.GetUserInput($"Is the {caller.Name} LED on?");
+                caller.AssertEqual(userInput, true, $"The {caller.Name} LED could not be turned on.");
+            }
+            else
+            {
+                caller.AssertEqual(result.ToString(), DaemonResponse.Success.ToString(), $"Could not set the {caller.Name} LED"); // this fails the test
+            }
+            var resetResult = this.SetLED(caller, false);
+            if (!caller.AssertEqual(resetResult.ToString(), DaemonResponse.Success.ToString(), $"The {caller.Name} LED could not be turned off")) return;
+            caller.TestStatus = Status.Passed;
+        }
+
+        internal DaemonResponse SetLED(HardwareTest caller, bool level)
+        {
+            string ledLevel = level == true ? "on" : "off";
+            return Controller.ExecuteTest(caller.Name + " " + ledLevel);
         }
 
         public override void Test()
         {
             throw new NotImplementedException();
         }
+    }
+    internal enum TargetLEDs
+    {
+        CCP_OK,
+        IED_OK,
+        FAULT,
+        CCP_DATA_TX,
+        CCP_DATA_RX,
+        IED_DATA_TX,
+        IED_DATA_RX
     }
 }
