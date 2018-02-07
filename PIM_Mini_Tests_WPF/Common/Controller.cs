@@ -1,7 +1,6 @@
 ﻿using Renci.SshNet;
 using Renci.SshNet.Common;
 using Serilog;
-using SimpleTCP;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +18,25 @@ namespace PIM_Mini_Tests_WPF.Common
         public static DaemonResponse StartDaemon()
         {
             Log.Information("Setting up SSH connection to start the daemon.");
+            if (Controller.IsDaemonStarted == true)
+            {
+                Log.Logger.Warning("The daemon has already started.");
+            }
+            else
+            {
+                var response = Controller.SendSSHMessage("python /test/daemon.py start");   
+                if (response != DaemonResponse.Success)
+                {
+                    return response;
+                }
+            }
+
+            var message = "ack";
+            return Controller.SendTcpMessage(message);
+        }
+
+        private static DaemonResponse SendSSHMessage(string message)
+        {
             var connectionInfo = new ConnectionInfo(
                 Properties.Settings.Default.targetAddress,
                 Properties.Settings.Default.sshUsername,
@@ -33,9 +51,11 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("SSH connecting.");
                     client.Connect();
                     Log.Information("SSH connected.");
-                    var startCommand = client.CreateCommand("python /test/daemon.py");
+                    var startCommand = client.CreateCommand(message);
                     startCommand.Execute();
-                    Log.Information("Start command sent and executed.");
+                    Log.Information($"Command '{message}' sent and executed");
+                    Controller.IsDaemonStarted = true;
+                    return DaemonResponse.Success;
                 }
                 catch (ObjectDisposedException ex)
                 {
@@ -63,21 +83,21 @@ namespace PIM_Mini_Tests_WPF.Common
                     return DaemonResponse.InvalidOperationException;
                 }
             }
+        }
 
-            var message = "ack";
+        public static DaemonResponse KillDaemonTcp()
+        {
+            if (Controller.IsDaemonStarted == false)
+            {
+                Log.Logger.Warning("The daemon has already been killed");
+                return DaemonResponse.AlreadyDead;
+            }
+            var message = "stop";
             return Controller.SendTcpMessage(message);
         }
 
-        public static DaemonResponse KillDaemon()
-        {
-            using (var client = new SimpleTcpClient().Connect(Properties.Settings.Default.targetAddress, Controller.port))
-            {
-                Log.Information("Sending kill signal to the daemon.");
-                client.Delimiter = new byte();
-                var message = "die";
-                return Controller.SendTcpMessage(message);
-            }
-        }
+        public static DaemonResponse KillDaemonSSH() => Controller.SendSSHMessage("python /test/daemon.py stop");
+        
 
         internal static DaemonResponse SendTcpMessage(string message)
         {
@@ -98,7 +118,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("Data transmitted");
 
                     DateTime now = DateTime.Now;
-                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
 
                     while (!dataStream.DataAvailable)
                     {
@@ -156,7 +176,7 @@ namespace PIM_Mini_Tests_WPF.Common
         /// </summary>
         /// <param name="test">Name of the test</param>
         /// <returns>The result of the test, or any errors which occured during execution</returns>
-        public static DaemonResponse StartTest(string test)
+        public static DaemonResponse ExecuteTest(string test)
         {
             Log.Information("Starting TCP client");
             using (var client = new TcpClient())
@@ -175,7 +195,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("Data transmitted");
 
                     DateTime now = DateTime.Now;
-                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
 
                     while (!dataStream.DataAvailable)
                     {
@@ -202,7 +222,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     }
 
                     now = DateTime.Now;
-                    waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
                     while (!dataStream.DataAvailable)
                     {
                         if (now + waitTime < DateTime.Now)
@@ -227,7 +247,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     {
                         case "pin set":
                             Log.Information("The pin was successfully set.");
-                            return DaemonResponse.PinSet;
+                            return DaemonResponse.Success;
                         case "pin fail":
                             Log.Fatal("The pin could not be set");
                             return DaemonResponse.PinSetFailed;
@@ -263,7 +283,6 @@ namespace PIM_Mini_Tests_WPF.Common
     public enum DaemonResponse
     {
         Success,
-        PinSet,
         PinSetFailed,
         IncorrectResponse,
         InvalidOperationException,
@@ -273,8 +292,8 @@ namespace PIM_Mini_Tests_WPF.Common
         ProxyException,
         ArgumentNullException,
         ArgumentOutOfRangeException,
-        TcpClientFailure,
         DaemonReceiveFailure,
-        TimeOut
+        TimeOut,
+        AlreadyDead
     }
 }
