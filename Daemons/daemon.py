@@ -1,7 +1,5 @@
-
 """
 Daemon which allows the automation of the execution of tests.
-Calls user_inputs_target.py
 """
 
 import sys
@@ -12,7 +10,7 @@ from datetime import datetime, timedelta
 import time
 import atexit
 from signal import SIGTERM
-import user_inputs_target
+import user_inputs
 
 
 class Daemon(object):
@@ -27,6 +25,12 @@ class Daemon(object):
         self.stdout = stdout
         self.stderr = stderr
         self.pidfile = pidfile
+        # hackish way to get the local address - per https://stackoverflow.com/a/166589/5018082
+        temp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        temp_sock.connect(("8.8.8.8", 80))
+        self.server_address = temp_sock.getsockname()[0]
+        temp_sock.close()
+        self.sock = None
 
     def daemonize(self):
         """
@@ -140,10 +144,67 @@ class Daemon(object):
         self.stop()
         self.start()
 
+    def test_runner(self):
+        """Listens over TCP, executes tests, and returns the results to the controller"""
+        command = None
+        time_to_stop = datetime.now() + timedelta(minutes=5)
+        while command != "stop" and time_to_stop > datetime.now():
+            command = self.sock.recv(64) # TCP receives here
+            self.sock.sendall(command.strip())
+            log = "Received " + command
+            logging.info(log)
+
+            result = "error"
+            commands = command.split(" ")
+            if command[0] == "UserInput":
+                user_input = None
+                if commands[1] == "One":
+                    user_input = user_inputs.UserInputOne()
+                elif commands[1] == "Two":
+                    user_input = user_input.UserInputTwo()
+                elif commands[1] == "Three":
+                    user_input = user_input.UserInputThree()
+
+
+                if commands[2] == "high":
+                    result = user_input.test_high()
+                elif commands[2] == "low":
+                    result = user_input.test_low()
+
+            self.sock.sendall(result)
+        self.stop()
+
     def run(self):
-        """
-        You should override this method when you subclass Daemon.
-        It will be called after the process has been
-        daemonized by start() or restart().
-        """
-        pass
+        """Starts listening over TCP, and starts the test runner"""
+        try:
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.connect(self.server_address)
+            message = self.sock.recv(64) # should receive ack
+            self.sock.sendall(message.strip())
+            self.test_runner()
+        except ValueError as ex:
+            log = "Invalid number of arguments:" + ex
+            logging.error(log)
+            sys.exit(2)
+
+
+def _main():
+    logging.basicConfig(filename="/test/pim_tests_daemon" + datetime.now() + ".log",
+                        filemode='w', format='%(asctime): ')
+    daemon = Daemon('/test/pim_tests_daemon.pid')
+    if len(sys.argv) == 2:
+        if sys.argv[1] == 'stop':
+            daemon.stop()
+        # elif sys.argv[1] == 'restart':
+        #     daemon.restart()
+        else:
+            daemon.start()
+        sys.exit(0)
+    else:
+        print "usage: %s start|stop" % sys.argv[0]
+        # print "usage: %s start|stop|restart" % sys.argv[0]
+        sys.exit(2)
+
+
+if __name__ == "__main__":
+    _main()

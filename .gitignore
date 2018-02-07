@@ -263,3 +263,6 @@ __pycache__/
 # Logging files
 logs/
 *.log
+
+# Visual Studio Code
+.vscode

@@ -24,50 +24,10 @@ namespace PIM_Mini_Tests_WPF.Common
             }
             else
             {
-                var connectionInfo = new ConnectionInfo(
-                Properties.Settings.Default.targetAddress,
-                Properties.Settings.Default.sshUsername,
-                new PasswordAuthenticationMethod(
-                    Properties.Settings.Default.sshUsername,
-                    Properties.Settings.Default.sshPassword));
-
-                using (var client = new SshClient(connectionInfo))
+                var response = Controller.SendSSHMessage("python /test/daemon.py start");   
+                if (response != DaemonResponse.Success)
                 {
-                    try
-                    {
-                        Log.Information("SSH connecting.");
-                        client.Connect();
-                        Log.Information("SSH connected.");
-                        var startCommand = client.CreateCommand("python /test/daemon.py");
-                        startCommand.Execute();
-                        Log.Information("Start command sent and executed.");
-                        Controller.IsDaemonStarted = true;
-                    }
-                    catch (ObjectDisposedException ex)
-                    {
-                        Log.Fatal(ex.Message);
-                        return DaemonResponse.ObjectDisposedException;
-                    }
-                    catch (SocketException ex)
-                    {
-                        Log.Fatal(ex.Message);
-                        return DaemonResponse.SocketException;
-                    }
-                    catch (SshConnectionException ex)
-                    {
-                        Log.Fatal(ex.Message);
-                        return DaemonResponse.SshConnectionException;
-                    }
-                    catch (ProxyException ex)
-                    {
-                        Log.Fatal(ex.Message);
-                        return DaemonResponse.ProxyException;
-                    }
-                    catch (InvalidOperationException ex)
-                    {
-                        Log.Fatal(ex.Message);
-                        return DaemonResponse.InvalidOperationException;
-                    }
+                    return response;
                 }
             }
 
@@ -75,16 +35,69 @@ namespace PIM_Mini_Tests_WPF.Common
             return Controller.SendTcpMessage(message);
         }
 
-        public static DaemonResponse KillDaemon()
+        private static DaemonResponse SendSSHMessage(string message)
+        {
+            var connectionInfo = new ConnectionInfo(
+                Properties.Settings.Default.targetAddress,
+                Properties.Settings.Default.sshUsername,
+                new PasswordAuthenticationMethod(
+                    Properties.Settings.Default.sshUsername,
+                    Properties.Settings.Default.sshPassword));
+
+            using (var client = new SshClient(connectionInfo))
+            {
+                try
+                {
+                    Log.Information("SSH connecting.");
+                    client.Connect();
+                    Log.Information("SSH connected.");
+                    var startCommand = client.CreateCommand(message);
+                    startCommand.Execute();
+                    Log.Information($"Command '{message}' sent and executed");
+                    Controller.IsDaemonStarted = true;
+                    return DaemonResponse.Success;
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ObjectDisposedException;
+                }
+                catch (SocketException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SocketException;
+                }
+                catch (SshConnectionException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.SshConnectionException;
+                }
+                catch (ProxyException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.ProxyException;
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Log.Fatal(ex.Message);
+                    return DaemonResponse.InvalidOperationException;
+                }
+            }
+        }
+
+        public static DaemonResponse KillDaemonTcp()
         {
             if (Controller.IsDaemonStarted == false)
             {
                 Log.Logger.Warning("The daemon has already been killed");
                 return DaemonResponse.AlreadyDead;
             }
-            var message = "die";
+            var message = "stop";
             return Controller.SendTcpMessage(message);
         }
+
+        public static DaemonResponse KillDaemonSSH() => Controller.SendSSHMessage("python /test/daemon.py stop");
+        
 
         internal static DaemonResponse SendTcpMessage(string message)
         {
@@ -105,7 +118,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("Data transmitted");
 
                     DateTime now = DateTime.Now;
-                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
 
                     while (!dataStream.DataAvailable)
                     {
@@ -182,7 +195,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     Log.Information("Data transmitted");
 
                     DateTime now = DateTime.Now;
-                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    TimeSpan waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
 
                     while (!dataStream.DataAvailable)
                     {
@@ -209,7 +222,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     }
 
                     now = DateTime.Now;
-                    waitTime = new TimeSpan(hours: 0, minutes: 10, seconds: 0);
+                    waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
                     while (!dataStream.DataAvailable)
                     {
                         if (now + waitTime < DateTime.Now)
