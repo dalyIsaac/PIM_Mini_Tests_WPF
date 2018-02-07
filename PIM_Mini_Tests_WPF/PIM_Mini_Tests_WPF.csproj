@@ -83,6 +83,13 @@
     <Compile Include="FRAM\TestWriteReadSingle.cs" />
     <Compile Include="FRAM\FRAM.cs" />
     <Compile Include="LEDS\LEDS.cs" />
+    <Compile Include="LEDS\TestCcpDataRx.cs" />
+    <Compile Include="LEDS\TestCcpDataTx.cs" />
+    <Compile Include="LEDS\TestCcpOk.cs" />
+    <Compile Include="LEDS\TestFault.cs" />
+    <Compile Include="LEDS\TestIedDataRx.cs" />
+    <Compile Include="LEDS\TestIedDataTx.cs" />
+    <Compile Include="LEDS\TestIedOk.cs" />
     <Compile Include="LEDS\TestPower.cs" />
     <Compile Include="LEDS\TestWatchdog.cs" />
     <Compile Include="RTC\RTC.cs" />
