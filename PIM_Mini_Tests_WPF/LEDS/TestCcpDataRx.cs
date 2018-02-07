@@ -9,7 +9,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
 {
     public class TestCcpDataRx : HardwareTest
     {
-        public TestCcpDataRx() : base("IED Ok")
+        public TestCcpDataRx() : base("CCP Data Rx")
         {
         }
 
