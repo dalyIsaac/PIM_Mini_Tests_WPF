@@ -10,7 +10,7 @@ namespace PIM_Mini_Tests_WPF.UserInputs
 {
     public class UserInputs : HardwareTest
     {
-        public UserInputs() : base("User Inputs", new HardwareTest[]{ })
+        public UserInputs() : base("User Inputs", new HardwareTest[] { new UserInputOne(), new UserInputTwo(), new UserInputThree() })
         {
         }
 
