@@ -14,24 +14,27 @@ namespace PIM_Mini_Tests_WPF.UserInputs
         {
         }
 
-        internal DaemonResponse _Test(Type caller)
+        internal DaemonResponse Check(Type caller, string level)
         {
             string testName = "";
             if (caller == typeof(UserInputOne))
             {
-                testName = "UserInputOne";
+                testName = "UserInput One";
             }
             else if (caller == typeof(UserInputTwo))
             {
-                testName = "UserInputTwo";
+                testName = "UserInput Two";
             }
             else if (caller == typeof(UserInputThree))
             {
-                testName = "UserInputThree";
+                testName = "UserInput Three";
             }
-            var result = Controller.ExecuteTest(testName);
+
+            var result = Controller.ExecuteTest(testName + " " + level);
             return result;
         }
+
+
 
         public override void Test()
         {
