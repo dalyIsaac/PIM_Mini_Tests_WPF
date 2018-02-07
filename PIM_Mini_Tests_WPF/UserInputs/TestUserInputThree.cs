@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PIM_Mini_Tests_WPF.UserInputs
 {
-    class UserInputOne : HardwareTest
+    class TestUserInputThree : HardwareTest
     {
-        public UserInputOne() : base("User input one")
+        public TestUserInputThree() : base("User input three")
         {
         }
 

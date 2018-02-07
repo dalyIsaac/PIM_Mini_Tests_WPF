@@ -11,6 +11,7 @@ import time
 import atexit
 from signal import SIGTERM
 import user_inputs
+import leds
 
 
 class Daemon(object):
@@ -150,12 +151,14 @@ class Daemon(object):
         time_to_stop = datetime.now() + timedelta(minutes=2)
         while command != "stop" and time_to_stop > datetime.now():
             command = self.sock.recv(64) # TCP receives here
-            self.sock.sendall(command.strip())
+            command = command.strip()
+            self.sock.sendall(command)
             log = "Received " + command
             logging.info(log)
 
             result = "error"
             commands = command.split(" ")
+            led_commands = command.split("_")
             if command[0] == "UserInput":
                 user_input = None
                 if commands[1] == "One":
@@ -170,6 +173,28 @@ class Daemon(object):
                     result = user_input.test_high()
                 elif commands[2] == "low":
                     result = user_input.test_low()
+
+            elif led_commands[0] == "CCP_Ok":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ccp_ok(level)
+            elif led_commands[0] == "IED_Ok":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ied_ok(level)
+            elif led_commands[0] == "Fault":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_fault(level)
+            elif led_commands[0] == "CCP_Data_Tx":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ccp_data_tx(level)
+            elif led_commands[0] == "CCP_Data_Rx":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ccp_data_rx(level)
+            elif led_commands[0] == "IED_Data_Tx":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ied_data_tx(level)
+            elif led_commands[0] == "IED_Data_Rx":
+                level = True if led_commands[1] == "on" else False
+                result = leds.test_ied_data_rx(level)
 
             self.sock.sendall(result)
             time_to_stop = datetime.now() + timedelta(minutes=2)
