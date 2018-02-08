@@ -1,5 +1,57 @@
 # PIM_Mini_Tests_WPF
 
+## Building
+
+In order to build the `PIM_Mini_Tests_WPF` project, the [Aardvark Software API](https://www.totalphase.com/products/aardvark-software-api/) is required.
+`PIM_Mini_Tests_WPF` has only been **tested only with  Aardvark Software API v5.30 (Windows 64-bit). There is no guarantee that it will work with 32-bit SKUs, or other versions (+v5.30 or -v5.30).**
+
+The file structure from root should look like the following:
+
+```
+aardvark/
+  bin/
+    Debug/ # if PIM_Mini_Tests_WPF is built in the Debug configuration
+      aardvark.dll
+      aardvark.pdb
+      aardvark_net.dll
+    Release/ # if PIM_Mini_Tests_WPF is built in the Release configuration
+      aardvark.dll
+      aardvark.pdb
+      aardvark_net.dll
+  obj/
+    Debug/
+      ...
+      aardvark.dll
+      ...
+    Release/
+      ...
+      aardvark.dll
+      ...
+  Properties/
+    AssemblyInfo.cs
+  aardvark.cs
+  aardvark.csproj
+Daemons/
+  ...
+PIM_Mini_Tests_WPF/
+  ...
+```
+
+### Tested configuration
+
+`PIM_Mini_Tests_WPF` has been tested on the following configuration:
+
+- Windows 10 Pro Version 1709 (OS Build 16299.214)
+- Intel x86-64
+- PIM Mini (made by Production Software Limited)
+  - Python 2.7
+    - `pyserial` version ___
+    - `python-periphery` version ___
+- [Total Phase Aardvark I2C/SPI Host Adapter](https://www.totalphase.com/products/aardvark-i2cspi/)
+  - [Total Phase USB Drivers - Windows](https://www.totalphase.com/products/usb-drivers-windows/)
+
+Code which targets the PIM Mini is preloaded onto the device during the production of the device.
+
 ## Licenses
 
 ### [`python-periphery`](https://github.com/vsergeev/python-periphery)
