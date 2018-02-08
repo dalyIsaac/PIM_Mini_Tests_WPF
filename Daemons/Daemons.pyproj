@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="comms.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="daemon.py" />
     <Compile Include="leds.py">
       <SubType>Code</SubType>

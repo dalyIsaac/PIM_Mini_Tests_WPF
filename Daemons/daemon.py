@@ -12,7 +12,7 @@ import atexit
 from signal import SIGTERM
 import user_inputs
 import leds
-
+import comms
 
 class Daemon(object):
     """
@@ -157,8 +157,9 @@ class Daemon(object):
             logging.info(log)
 
             result = "error"
-            commands = command.split(" ")
-            led_commands = command.split("_")
+            commands = command.split("_")
+            
+            # UserInput
             if command[0] == "UserInput":
                 user_input = None
                 if commands[1] == "One":
@@ -173,30 +174,49 @@ class Daemon(object):
                     result = user_input.test_high()
                 elif commands[2] == "low":
                     result = user_input.test_low()
-
-            elif led_commands[0] == "CCP_Ok":
-                level = True if led_commands[1] == "on" else False
+            
+            # LEDs
+            elif commands[0] == "CCP_Ok":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ccp_ok(level)
-            elif led_commands[0] == "IED_Ok":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "IED_Ok":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ied_ok(level)
-            elif led_commands[0] == "Fault":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "Fault":
+                level = True if commands[1] == "on" else False
                 result = leds.test_fault(level)
-            elif led_commands[0] == "CCP_Data_Tx":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "CCP_Data_Tx":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ccp_data_tx(level)
-            elif led_commands[0] == "CCP_Data_Rx":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "CCP_Data_Rx":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ccp_data_rx(level)
-            elif led_commands[0] == "IED_Data_Tx":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "IED_Data_Tx":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ied_data_tx(level)
-            elif led_commands[0] == "IED_Data_Rx":
-                level = True if led_commands[1] == "on" else False
+            elif commands[0] == "IED_Data_Rx":
+                level = True if commands[1] == "on" else False
                 result = leds.test_ied_data_rx(level)
 
-            self.sock.sendall(result)
+            # comms
+            elif commands[0] == "CCP":
+                com = comms.CCPComms()
+                if commands[1] == "TTL":
+                    result = com.test_ttl()
+                elif commands[1] == "RS232":
+                    result = com.test_rs232()
+                elif commands[1] == "RS485":
+                    result = com.test_rs485()
+            elif commands[0] == "IED":
+                com = comms.IED_TTL()
+                if commands[1] == "TTL":
+                    result = com.test_ttl()
+                elif commands[1] == "RS232":
+                    result = com.test_rs232()
+                elif commands[1] == "RS485":
+                    result = com.test_rs485()
+
+            self.sock.sendall(str(result))
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
