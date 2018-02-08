@@ -298,5 +298,41 @@ namespace PIM_Mini_Tests_WPF.Properties {
                 this["rtcTimePeriod"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.40")]
+        public string targetAddress {
+            get {
+                return ((string)(this["targetAddress"]));
+            }
+            set {
+                this["targetAddress"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("root")]
+        public string sshPassword {
+            get {
+                return ((string)(this["sshPassword"]));
+            }
+            set {
+                this["sshPassword"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("root")]
+        public string sshUsername {
+            get {
+                return ((string)(this["sshUsername"]));
+            }
+            set {
+                this["sshUsername"] = value;
+            }
+        }
     }
 }

@@ -12,14 +12,9 @@ namespace PIM_Mini_Tests_WPF.Startup
         public TestWatchDog() : base("Watchdog") { }
         public override void Test()
         {
-            if ((bool)this.IsChecked)
-            {
-                bool status = this.GetUserInput("Is the watchdog performing as expected?");
-                if (this.AssertEqual(status, true, "The watchdog was not performing as expected"))
-                {
-                    this.TestStatus = Status.Passed;
-                }
-            }
+            bool status = this.GetUserInput("Is the watchdog performing as expected?");
+            if (!this.AssertEqual(status, true, "The watchdog was not performing as expected.")) return;
+            this.TestStatus = Status.Passed;
         }
     }
 }
