@@ -266,3 +266,6 @@ logs/
 
 # Visual Studio Code
 .vscode
+
+# Total Phase
+/aardvark/*
