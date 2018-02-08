@@ -24,7 +24,7 @@ namespace PIM_Mini_Tests_WPF.Common
             }
             else
             {
-                var response = Controller.SendSSHMessage("python /test/daemon.py start");   
+                var response = Controller.SendSSHMessage("python /tests/daemon.py start");   
                 if (response != DaemonResponse.Success)
                 {
                     return response;
@@ -96,7 +96,7 @@ namespace PIM_Mini_Tests_WPF.Common
             return Controller.SendTcpMessage(message);
         }
 
-        public static DaemonResponse KillDaemonSSH() => Controller.SendSSHMessage("python /test/daemon.py stop");
+        public static DaemonResponse KillDaemonSSH() => Controller.SendSSHMessage("python /tests/daemon.py stop");
         
 
         internal static DaemonResponse SendTcpMessage(string message)

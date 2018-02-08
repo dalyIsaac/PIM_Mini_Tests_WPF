@@ -235,9 +235,9 @@ class Daemon(object):
 
 
 def _main():
-    logging.basicConfig(filename="/test/pim_tests_daemon" + datetime.now() + ".log",
+    logging.basicConfig(filename="/tests/pim_tests_daemon" + datetime.now() + ".log",
                         filemode='w', format='%(asctime): ')
-    daemon = Daemon('/test/pim_tests_daemon.pid')
+    daemon = Daemon('/tests/pim_tests_daemon.pid')
     if len(sys.argv) == 2:
         if sys.argv[1] == 'stop':
             daemon.stop()
