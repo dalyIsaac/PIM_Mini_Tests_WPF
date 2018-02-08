@@ -74,6 +74,15 @@
     </ApplicationDefinition>
     <Compile Include="Common\AardvarkExtensions.cs" />
     <Compile Include="Common\Controller.cs" />
+    <Compile Include="COMMS\IED\IED.cs" />
+    <Compile Include="COMMS\IED\TestRS232.cs" />
+    <Compile Include="COMMS\IED\TestRS485.cs" />
+    <Compile Include="COMMS\IED\TestTTL.cs" />
+    <Compile Include="COMMS\CCP\CCP.cs" />
+    <Compile Include="COMMS\CCP\TestRS232.cs" />
+    <Compile Include="COMMS\CCP\TestRS485.cs" />
+    <Compile Include="COMMS\CCP\TestTTL.cs" />
+    <Compile Include="COMMS\COMMS.cs" />
     <Compile Include="EEPROM\EEPROM.cs" />
     <Compile Include="EEPROM\TestOpenClose.cs" />
     <Compile Include="EEPROM\TestWriteReadMemory.cs" />

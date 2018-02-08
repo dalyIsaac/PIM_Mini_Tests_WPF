@@ -12,7 +12,7 @@ namespace PIM_Mini_Tests_WPF.RTC
     /// </summary>
     public class TestSetMinute : HardwareTest
     {
-        public TestSetMinute() : base(" Checks that the minutes turn over the hour correctly")
+        public TestSetMinute() : base("Checks that the minutes turn over the hour correctly")
         {
         }
 
