@@ -19,18 +19,18 @@ namespace PIM_Mini_Tests_WPF.UserInputs
             string testName = "";
             if (caller == typeof(TestUserInputOne))
             {
-                testName = "UserInput One";
+                testName = "UserInput_One";
             }
             else if (caller == typeof(TestUserInputTwo))
             {
-                testName = "UserInput Two";
+                testName = "UserInput_Two";
             }
             else if (caller == typeof(TestUserInputThree))
             {
-                testName = "UserInput Three";
+                testName = "UserInput_Three";
             }
 
-            var result = Controller.ExecuteTest(testName + " " + level);
+            var result = Controller.ExecuteTest(testName + "_" + level);
             return result;
         }
 

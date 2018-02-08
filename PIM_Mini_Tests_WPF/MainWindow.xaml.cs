@@ -42,7 +42,9 @@ namespace PIM_Mini_Tests_WPF
                 new FRAM.FRAM(),
                 new RTC.RTC(),
                 new UserInputs.UserInputs(),
-                new LEDS.LEDS()
+                new LEDS.LEDS(),
+                new COMMS.CCP.CCP(),
+                new COMMS.IED.IED()
             };
             this.tree.DataContext = this.tests;
             this.tree.ItemsSource = this.tests;
