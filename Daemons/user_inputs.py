@@ -9,9 +9,9 @@ LOW = "low"
 PRESERVE = "preserve"
 
 
-USER_INPUT_1 = GPIO(pin=0, direction=PRESERVE)
-USER_INPUT_2 = GPIO(pin=0, direction=PRESERVE)
-USER_INPUT_3 = GPIO(pin=0, direction=PRESERVE)
+USER_INPUT_1 = GPIO(pin=85, direction=PRESERVE)
+USER_INPUT_2 = GPIO(pin=86, direction=PRESERVE)
+USER_INPUT_3 = GPIO(pin=90, direction=PRESERVE)
 
 
 class UserInputs(object):
