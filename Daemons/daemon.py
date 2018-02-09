@@ -29,7 +29,7 @@ class Daemon(object):
         # hackish way to get the local address - per https://stackoverflow.com/a/166589/5018082
         temp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         temp_sock.connect(("8.8.8.8", 80))
-        self.server_address = temp_sock.getsockname()[0]
+        self.server_address = temp_sock.getsockname()[0], 10000
         temp_sock.close()
         self.sock = None
 
@@ -224,6 +224,7 @@ class Daemon(object):
         """Starts listening over TCP, and starts the test runner"""
         try:
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock.bind(self.server_address)
             self.sock.connect(self.server_address)
             message = self.sock.recv(64) # should receive ack
             self.sock.sendall(message.strip())
@@ -235,7 +236,7 @@ class Daemon(object):
 
 
 def _main():
-    logging.basicConfig(filename="/tests/pim_tests_daemon" + datetime.now() + ".log",
+    logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
                         filemode='w', format='%(asctime): ')
     daemon = Daemon('/tests/pim_tests_daemon.pid')
     if len(sys.argv) == 2:

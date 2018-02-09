@@ -1,24 +1,24 @@
 """Tests the serial communications for the PIM_Mini"""
 
-from serial import Serial, rs485, PARITY_ODD, STOP_BITS_ONE, EIGHTBITS
+from serial import Serial, rs485, PARITY_ODD, STOPBITS_ONE, EIGHTBITS
 
-CCP_TTL = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+CCP_TTL = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 CCP_TTL.port = "/dev/ttymx2"
 
-CCP_RS232 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+CCP_RS232 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 CCP_RS232.port = "/dev/ttymx2"
 
-CCP_RS485 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+CCP_RS485 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 CCP_RS485.port = "/dev/ttymx2"
 CCP_RS485.rs485_mode = rs485.RS485Settings()
 
-IED_TTL = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+IED_TTL = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 IED_TTL.port = "/dev/ttymx4"
 
-IED_RS232 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+IED_RS232 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 IED_RS232.port = "/dev/ttymx4"
 
-IED_RS485 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOP_BITS_ONE, bytesize=EIGHTBITS)
+IED_RS485 = Serial(baudrate=9600, parity=PARITY_ODD, stopbits=STOPBITS_ONE, bytesize=EIGHTBITS)
 IED_RS485.port = "/dev/ttymx4"
 
 TEST_STRING = b"The quick brown fox jumps over the lazy dog 0123456789"
