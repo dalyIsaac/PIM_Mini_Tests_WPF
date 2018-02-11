@@ -42,30 +42,34 @@ class Daemon(object):
         try:
             pid = os.fork()  # pylint: disable=E1101
             if pid > 0:
-                # exit first parent
+                logging.error("Exiting first parent")
                 sys.exit(0)
         except OSError, exception:
-            sys.stderr.write("fork #1 failed: %d (%s)\n" %
-                             (exception.errno, exception.strerror))
+            message = "fork #1 failed: %d (%s)\n" % (exception.errno, exception.strerror)
+            logging.error(message)
             sys.exit(1)
 
         # decouple from parent environment
+        logging.info("Decoupling from parent environment")
         os.chdir("/")
         os.setsid()  # pylint: disable=E1101
         os.umask(0)
 
         # do second fork
+        logging.info("Doing second fork")
         try:
             pid = os.fork()  # pylint: disable=E1101
             if pid > 0:
                 # exit from second parent
+                logging.error("Exiting from second parent")
                 sys.exit(0)
         except OSError, exception:
-            sys.stderr.write("fork #2 failed: %d (%s)\n" %
-                             (exception.errno, exception.strerror))
+            message = "fork #2 failed: %d (%s)\n" % (exception.errno, exception.strerror)
+            logging.error(message)
             sys.exit(1)
 
         # redirect standard file descriptors
+        logging.info("Redirecting standard file descriptors")
         sys.stdout.flush()
         sys.stderr.flush()
         sys_in_file = file(self.stdin, 'r')
@@ -76,6 +80,7 @@ class Daemon(object):
         os.dup2(sys_err_file.fileno(), sys.stderr.fileno())
 
         # write pidfile
+        logging.info("Writing pidfile")
         atexit.register(self.delpid)
         pid = str(os.getpid())
         file(self.pidfile, 'w+').write("%s\n" % pid)
@@ -99,12 +104,14 @@ class Daemon(object):
             pid = None
 
         if pid:
-            message = "pidfile %s already exist. Daemon already running?\n"
-            sys.stderr.write(message % self.pidfile)
+            message = "pidfile %s already exist. Daemon already running?\n" % self.pidfile
+            logging.error(message)
             sys.exit(1)
 
         # Start the daemon
+        logging.info("Starting daemonize.")
         self.daemonize()
+        logging.info("Starting run")
         self.run()
 
     def stop(self):
@@ -120,8 +127,8 @@ class Daemon(object):
             pid = None
 
         if not pid:
-            message = "pidfile %s does not exist. Daemon not running?\n"
-            sys.stderr.write(message % self.pidfile)
+            message = "pidfile %s does not exist. Daemon not running?\n" % self.pidfile
+            logging.error(message)
             return  # not an error in a restart
 
         # Try killing the daemon process
@@ -150,11 +157,14 @@ class Daemon(object):
         command = None
         time_to_stop = datetime.now() + timedelta(minutes=2)
         while command != "stop" and time_to_stop > datetime.now():
+            logging.info("Starting to listen")
             command = self.sock.recv(64) # TCP receives here
             command = command.strip()
+            output = "Received " + command
+            logging.info(output)
             self.sock.sendall(command)
-            log = "Received " + command
-            logging.info(log)
+            message = "Ack: " + command
+            logging.info(message)
 
             result = "error"
             commands = command.split("_")
@@ -216,6 +226,8 @@ class Daemon(object):
                 elif commands[1] == "RS485":
                     result = com.test_rs485()
 
+            message = "Sending back" + result
+            logging.info(message)
             self.sock.sendall(str(result))
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
@@ -223,11 +235,18 @@ class Daemon(object):
     def run(self):
         """Starts listening over TCP, and starts the test runner"""
         try:
+            logging.info("Starting socket")
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            logging.info("Binding socket")
             self.sock.bind(self.server_address)
+            logging.info("Connecting socket")
             self.sock.connect(self.server_address)
+            logging.info("Receiving data")
             message = self.sock.recv(64) # should receive ack
+            output = "Sending " + message + " back"
+            logging.info(output)
             self.sock.sendall(message.strip())
+            logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
             log = "Invalid number of arguments:" + ex
