@@ -32,7 +32,6 @@ class Daemon(object):
         self.server_address = temp_sock.getsockname()[0], 10000
         temp_sock.close()
         self.sock = None
-        self.connection = None
 
     def daemonize(self):
         """
@@ -238,13 +237,13 @@ class Daemon(object):
         """Starts listening over TCP, and starts the test runner"""
         try:
             logging.info("Starting socket")
-            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             logging.info("Binding socket")
-            self.sock.bind(self.server_address)
+            sock.bind(self.server_address)
             logging.info("Listening for an incoming connection")
-            self.sock.listen(1)
+            sock.listen(1)
             logging.info("Waiting for a connection")
-            self.connection, client_address = self.sock.accept()
+            self.sock, client_address = sock.accept()
             output = "Connection from " + str(client_address)
             logging.info(output)
 
