@@ -38,9 +38,6 @@ namespace PIM_Mini_Tests_WPF
             tests = new ObservableCollection<HardwareTest>()
             {
                 new Startup.Startup(),
-                new EEPROM.EEPROM(),
-                new FRAM.FRAM(),
-                new RTC.RTC(),
                 new UserInputs.UserInputs(),
                 new LEDS.LEDS(),
                 new COMMS.CCP.CCP(),

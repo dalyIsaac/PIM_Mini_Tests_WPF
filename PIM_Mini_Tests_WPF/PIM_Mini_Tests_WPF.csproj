@@ -72,7 +72,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Common\AardvarkExtensions.cs" />
     <Compile Include="Common\Controller.cs" />
     <Compile Include="COMMS\IED\IED.cs" />
     <Compile Include="COMMS\IED\TestRS232.cs" />
@@ -83,14 +82,6 @@
     <Compile Include="COMMS\CCP\TestRS485.cs" />
     <Compile Include="COMMS\CCP\TestTTL.cs" />
     <Compile Include="COMMS\COMMS.cs" />
-    <Compile Include="EEPROM\EEPROM.cs" />
-    <Compile Include="EEPROM\TestOpenClose.cs" />
-    <Compile Include="EEPROM\TestWriteReadMemory.cs" />
-    <Compile Include="FRAM\TestOpenClose.cs" />
-    <Compile Include="Common\TestPortReady.cs" />
-    <Compile Include="FRAM\TestWriteReadOverflow.cs" />
-    <Compile Include="FRAM\TestWriteReadSingle.cs" />
-    <Compile Include="FRAM\FRAM.cs" />
     <Compile Include="LEDS\LEDS.cs" />
     <Compile Include="LEDS\TestCcpDataRx.cs" />
     <Compile Include="LEDS\TestCcpDataTx.cs" />
@@ -101,26 +92,6 @@
     <Compile Include="LEDS\TestIedOk.cs" />
     <Compile Include="LEDS\TestPower.cs" />
     <Compile Include="LEDS\TestWatchdog.cs" />
-    <Compile Include="RTC\RTC.cs" />
-    <Compile Include="RTC\SleepConverter.cs" />
-    <Compile Include="RTC\TestSetDay28.cs" />
-    <Compile Include="RTC\TestSetHour.cs" />
-    <Compile Include="RTC\TestSetDay31.cs" />
-    <Compile Include="RTC\TestSetDay30.cs" />
-    <Compile Include="RTC\TestLeapYearDiv4.cs" />
-    <Compile Include="RTC\TestLeapYearDiv100.cs" />
-    <Compile Include="RTC\TestLeapYearDiv400.cs" />
-    <Compile Include="RTC\TestSetMinute.cs" />
-    <Compile Include="RTC\TestSetHourIncr.cs" />
-    <Compile Include="RTC\TestSetDayIncr.cs" />
-    <Compile Include="RTC\TestSetMonth.cs" />
-    <Compile Include="RTC\TestSetMonthIncr.cs" />
-    <Compile Include="RTC\TestSetYear.cs" />
-    <Compile Include="RTC\TestPeriod.cs" />
-    <Compile Include="RTC\TestSetYearIncr.cs" />
-    <Compile Include="RTC\TestSetMinuteIncr.cs" />
-    <Compile Include="RTC\TestSetSecondIncr.cs" />
-    <Compile Include="RTC\TestSetSecond.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Startup\Startup.cs" />
     <Compile Include="Startup\TestColdStart.cs" />

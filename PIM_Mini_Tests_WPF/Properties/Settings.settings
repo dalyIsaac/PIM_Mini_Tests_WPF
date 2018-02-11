@@ -2,75 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PIM_Mini_Tests_WPF.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="eepromPortNumber" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="eepromPageSize" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="eepromSlaveAddress" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="eepromBitrate" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="eepromNumPages" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="loggingLocation" Type="System.String" Scope="User">
-      <Value Profile="(Default)">PIM_Mini_Tests.log</Value>
-    </Setting>
-    <Setting Name="framPortNumber" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="framBitrate" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="framInitialAddress" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">32768</Value>
-    </Setting>
-    <Setting Name="framNumAddress" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="framPolarity" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="framPageSize" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcPortNumber" Type="System.UInt16" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcBitrate" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcYearAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcMonthAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcDayOfMonthAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcDayOfWeekAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcHoursAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcMinutesAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcSecondsAddr" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcSlaveAddress" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="rtcTimePeriod" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">60</Value>
-    </Setting>
     <Setting Name="targetAddress" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.1.40</Value>
     </Setting>
@@ -79,6 +10,9 @@
     </Setting>
     <Setting Name="sshUsername" Type="System.String" Scope="User">
       <Value Profile="(Default)">root</Value>
+    </Setting>
+    <Setting Name="loggingLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">PIM_Mini_Tests.log</Value>
     </Setting>
   </Settings>
 </SettingsFile>
