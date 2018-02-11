@@ -256,11 +256,11 @@ class Daemon(object):
             logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
-            log = "Invalid number of arguments:" + ex
+            log = "Invalid number of arguments:" + str(ex)
             logging.error(log)
             sys.exit(2)
         except Exception, ex:
-            log = "Unknown exception: " + ex
+            log = "Unknown exception: " + str(ex)
             logging.error(log)
             sys.exit(2)
 
