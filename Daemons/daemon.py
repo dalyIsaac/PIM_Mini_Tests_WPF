@@ -157,6 +157,7 @@ class Daemon(object):
         """Listens over TCP, executes tests, and returns the results to the controller"""
         command = None
         time_to_stop = datetime.now() + timedelta(minutes=2)
+        logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Starting to listen")
             command = self.sock.recv(64) # TCP receives here
@@ -258,8 +259,8 @@ class Daemon(object):
             log = "Invalid number of arguments:" + ex
             logging.error(log)
             sys.exit(2)
-        except Exception as ex:
-            log = "Unknown exception: " + ex
+        except:
+            log = "Unknown exception"
             logging.error(log)
             sys.exit(2)
 
