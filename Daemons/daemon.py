@@ -244,7 +244,7 @@ def _main():
         #     daemon.restart()
         else:
             logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
-                                filemode='w', format='%(levelname)s: %(message)s')
+                                filemode='w', format='%(levelname)s: %(message)s', level=logging.DEBUG)
             daemon.start()
         sys.exit(0)
     else:
