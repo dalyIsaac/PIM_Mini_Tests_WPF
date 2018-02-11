@@ -32,6 +32,7 @@ class Daemon(object):
         self.server_address = temp_sock.getsockname()[0], 10000
         temp_sock.close()
         self.sock = None
+        self.connection = None
 
     def daemonize(self):
         """
@@ -239,8 +240,13 @@ class Daemon(object):
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             logging.info("Binding socket")
             self.sock.bind(self.server_address)
-            logging.info("Connecting socket")
-            self.sock.connect(self.server_address)
+            logging.info("Listening for an incoming connection")
+            self.sock.listen(1)
+            logging.info("Waiting for a connection")
+            self.connection, client_address = self.sock.accept()
+            output = "Connection from " + client_address
+            logging.info(output)
+
             logging.info("Receiving data")
             message = self.sock.recv(64) # should receive ack
             output = "Sending " + message + " back"
