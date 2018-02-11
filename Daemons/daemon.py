@@ -236,8 +236,6 @@ class Daemon(object):
 
 
 def _main():
-    logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
-                        filemode='w', format='%(levelname)s: %(message)s')
     daemon = Daemon('/tests/pim_tests_daemon.pid')
     if len(sys.argv) == 2:
         if sys.argv[1] == 'stop':
@@ -245,6 +243,8 @@ def _main():
         # elif sys.argv[1] == 'restart':
         #     daemon.restart()
         else:
+            logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
+                                filemode='w', format='%(levelname)s: %(message)s')
             daemon.start()
         sys.exit(0)
     else:
