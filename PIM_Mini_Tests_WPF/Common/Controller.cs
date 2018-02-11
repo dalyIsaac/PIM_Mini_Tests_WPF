@@ -13,7 +13,7 @@ namespace PIM_Mini_Tests_WPF.Common
     public static class Controller
     {
         public static bool IsDaemonStarted = false;
-        internal readonly static int port = 1003;
+        internal readonly static int port = 10000;
 
         public static DaemonResponse StartDaemon()
         {

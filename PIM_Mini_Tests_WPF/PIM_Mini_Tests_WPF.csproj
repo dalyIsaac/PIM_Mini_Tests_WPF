@@ -149,12 +149,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\aardvark\aardvark.csproj">
-      <Project>{35e76e7b-1426-4d51-b172-852d69804fa6}</Project>
-      <Name>aardvark</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
