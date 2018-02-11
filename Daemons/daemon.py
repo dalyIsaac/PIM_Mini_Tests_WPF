@@ -252,6 +252,10 @@ class Daemon(object):
             log = "Invalid number of arguments:" + ex
             logging.error(log)
             sys.exit(2)
+        except Exception as ex:
+            log = "Unknown exception: " + ex
+            logging.error(log)
+            sys.exit(2)
 
 
 def _main():
