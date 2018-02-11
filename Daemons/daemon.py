@@ -245,7 +245,7 @@ class Daemon(object):
             self.sock.listen(1)
             logging.info("Waiting for a connection")
             self.connection, client_address = self.sock.accept()
-            output = "Connection from " + client_address
+            output = "Connection from " + str(client_address)
             logging.info(output)
 
             logging.info("Receiving data")
