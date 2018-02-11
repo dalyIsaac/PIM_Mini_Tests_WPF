@@ -260,7 +260,7 @@ class Daemon(object):
             logging.error(log)
             sys.exit(2)
         except Exception, ex:
-            log = "Unknown exception"
+            log = "Unknown exception: " + ex
             logging.error(log)
             sys.exit(2)
 
