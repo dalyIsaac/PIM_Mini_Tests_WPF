@@ -159,7 +159,12 @@ class Daemon(object):
         logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Starting to listen")
-            command = self.sock.recv(64) # TCP receives here
+            command = ""
+            while command.strip() != "":
+                command = self.sock.recv(64) # TCP receives here
+                if time_to_stop > datetime.now():
+                    logging.info("Timeout")
+                    self.stop()
             command = command.strip()
             output = "Received " + command
             logging.info(output)
