@@ -239,7 +239,7 @@ class Daemon(object):
                     result = com.test_rs485()
 
             message = "Sending back " + result
-            logging.info(message)
+            logging.debug(message)
             connection.sendall(str(result))
             logging.info("Closing this TCP session")
             connection.close()

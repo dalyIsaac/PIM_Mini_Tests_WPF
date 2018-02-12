@@ -139,6 +139,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     }
 
                     messageInStr = messageInStr.Trim();
+                    Log.Debug("Received: " + messageInStr);
                     if (messageInStr == message)
                     {
                         return DaemonResponse.Success;
