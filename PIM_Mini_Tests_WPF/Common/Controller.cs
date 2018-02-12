@@ -133,7 +133,11 @@ namespace PIM_Mini_Tests_WPF.Common
                     string messageInStr = "";
                     foreach (var item in messageIn)
                     {
-                        messageInStr += Convert.ToChar(item);
+                        var converted = Convert.ToChar(item);
+                        if (converted < 128)
+                        {
+                            messageInStr += Convert.ToChar(item);
+                        }
                     }
 
                     messageInStr = messageInStr.Trim();
