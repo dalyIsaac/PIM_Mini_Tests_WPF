@@ -168,7 +168,7 @@ class Daemon(object):
                 message = "Received '" + command + "'"
                 logging.info(message) 
                 command = self.sock.recv(64) # TCP receives here
-                if time_to_stop > datetime.now():
+                if time_to_stop < datetime.now():
                     logging.info("Timeout")
                     self.stop()
             command = command.strip()
