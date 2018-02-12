@@ -7,7 +7,6 @@
         xmlns:common="clr-namespace:PIM_Mini_Tests_WPF.Common"
         xmlns:controls="clr-namespace:PIM_Mini_Tests_WPF.Controls"
         xmlns:properties="clr-namespace:PIM_Mini_Tests_WPF.Properties"
-        xmlns:rtc="clr-namespace:PIM_Mini_Tests_WPF.RTC"
         mc:Ignorable="d"
         Title="PIM Mini Tests"
         MinWidth="740"
@@ -18,7 +17,6 @@
         <ResourceDictionary>
             <common:StatusToStringConverter x:Key="statusToString" />
             <common:StatusToColorConverter x:Key="statusToColor" />
-            <rtc:SleepConverter x:Key="sleepConverter" />
 
             <Style x:Key="TreeViewItemFocusVisual">
                 <Setter Property="Control.Template">
@@ -208,107 +206,6 @@
 
         <ScrollViewer Grid.Column="1" Grid.RowSpan="3" Margin="4">
             <StackPanel >
-
-                <!--EEPROM-->
-                <TextBlock Text="EEPROM" Style="{StaticResource Header}" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromPortNumber}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Page size: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromPageSize}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Slave address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromSlaveAddress}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Bitrate: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromBitrate}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Number of pages: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=eepromNumPages}"/>
-                </StackPanel>
-
-                <!--FRAM-->
-                <TextBlock Text="FRAM" Style="{StaticResource Header}" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framPortNumber}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Bitrate: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framBitrate}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Initial Address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framInitialAddress}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Number of addresses: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framNumAddress}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Polarity: " Style="{StaticResource SettingsLabel}"/>
-                    <ComboBox SelectedIndex="{Binding Source={x:Static properties:Settings.Default}, Path=framPolarity}">
-                        <ComboBoxItem>
-                            Rising/Falling
-                        </ComboBoxItem>
-                        <ComboBoxItem>
-                            Falling/Rising
-                        </ComboBoxItem>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Page size: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=framPageSize}"/>
-                </StackPanel>
-
-                <!--RTC-->
-                <TextBlock Text="RTC" Style="{StaticResource Header}" />
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Port number: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcPortNumber}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Bitrate: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcBitrate}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Year address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcYearAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Month address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcMonthAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Day of month address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcDayOfMonthAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Day of week address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcDayOfWeekAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Hours address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcHoursAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Minutes address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcMinutesAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="Seconds address: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcSecondsAddr}"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <Label Content="User specified time period: " Style="{StaticResource SettingsLabel}"/>
-                    <TextBox Style="{StaticResource SettingsTextBox}" Text="{Binding Source={x:Static properties:Settings.Default}, Path=rtcTimePeriod, Mode=TwoWay, Converter={StaticResource sleepConverter}}" />
-                </StackPanel>
-
                 <!--SSH-->
                 <TextBlock Text="Target Settings" Style="{StaticResource Header}" />
                 <StackPanel Orientation="Horizontal">

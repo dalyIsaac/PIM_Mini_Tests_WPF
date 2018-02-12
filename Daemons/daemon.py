@@ -42,30 +42,34 @@ class Daemon(object):
         try:
             pid = os.fork()  # pylint: disable=E1101
             if pid > 0:
-                # exit first parent
+                logging.error("Exiting first parent")
                 sys.exit(0)
         except OSError, exception:
-            sys.stderr.write("fork #1 failed: %d (%s)\n" %
-                             (exception.errno, exception.strerror))
+            message = "fork #1 failed: %d (%s)\n" % (exception.errno, exception.strerror)
+            logging.error(message)
             sys.exit(1)
 
         # decouple from parent environment
+        logging.info("Decoupling from parent environment")
         os.chdir("/")
         os.setsid()  # pylint: disable=E1101
         os.umask(0)
 
         # do second fork
+        logging.info("Doing second fork")
         try:
             pid = os.fork()  # pylint: disable=E1101
             if pid > 0:
                 # exit from second parent
+                logging.error("Exiting from second parent")
                 sys.exit(0)
         except OSError, exception:
-            sys.stderr.write("fork #2 failed: %d (%s)\n" %
-                             (exception.errno, exception.strerror))
+            message = "fork #2 failed: %d (%s)\n" % (exception.errno, exception.strerror)
+            logging.error(message)
             sys.exit(1)
 
         # redirect standard file descriptors
+        logging.info("Redirecting standard file descriptors")
         sys.stdout.flush()
         sys.stderr.flush()
         sys_in_file = file(self.stdin, 'r')
@@ -76,6 +80,7 @@ class Daemon(object):
         os.dup2(sys_err_file.fileno(), sys.stderr.fileno())
 
         # write pidfile
+        logging.info("Writing pidfile")
         atexit.register(self.delpid)
         pid = str(os.getpid())
         file(self.pidfile, 'w+').write("%s\n" % pid)
@@ -99,12 +104,14 @@ class Daemon(object):
             pid = None
 
         if pid:
-            message = "pidfile %s already exist. Daemon already running?\n"
-            sys.stderr.write(message % self.pidfile)
+            message = "pidfile %s already exist. Daemon already running?\n" % self.pidfile
+            logging.error(message)
             sys.exit(1)
 
         # Start the daemon
+        logging.info("Starting daemonize.")
         self.daemonize()
+        logging.info("Starting run")
         self.run()
 
     def stop(self):
@@ -113,15 +120,19 @@ class Daemon(object):
         """
         # Get the pid from the pidfile
         try:
+            logging.info("Retrieving the pid")
             pid_file = file(self.pidfile, 'r')
             pid = int(pid_file.read().strip())
+            logging.info("Closing the pid file")
             pid_file.close()
+            logging.info("Pid file closed")
         except IOError:
+            logging.error("IOError")
             pid = None
 
         if not pid:
-            message = "pidfile %s does not exist. Daemon not running?\n"
-            sys.stderr.write(message % self.pidfile)
+            message = "pidfile %s does not exist. Daemon not running?\n" % self.pidfile
+            logging.error(message)
             return  # not an error in a restart
 
         # Try killing the daemon process
@@ -149,95 +160,112 @@ class Daemon(object):
         """Listens over TCP, executes tests, and returns the results to the controller"""
         command = None
         time_to_stop = datetime.now() + timedelta(minutes=2)
+        logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
-            command = self.sock.recv(64) # TCP receives here
+            logging.info("Waiting for a connection")
+            connection, client_address = self.sock.accept()
+            message = "Accepted connection from " + str(client_address)
+            logging.info(message)
+            logging.info("Waiting for data")
+            command = connection.recv(64) # TCP receives here
             command = command.strip()
-            self.sock.sendall(command)
-            log = "Received " + command
-            logging.info(log)
+            output = "Received '" + command + "'"
+            logging.info(output)
 
             result = "error"
-            commands = command.split("_")
-            
+            command_list = command.split("_")
+            output = "Split commands: " + str(command_list)
+            logging.debug(output)
+
             # UserInput
-            if command[0] == "UserInput":
+            if command_list[0] == "UserInput":
+                logging.debug("Entered UserInput")
                 user_input = None
-                if commands[1] == "One":
-                    user_input = user_inputs.UserInputOne()
-                elif commands[1] == "Two":
-                    user_input = user_input.UserInputTwo()
-                elif commands[1] == "Three":
-                    user_input = user_input.UserInputThree()
+                if command_list[1] == "One":
+                    user_input = user_inputs.UserInputOne(logging)
+                elif command_list[1] == "Two":
+                    user_input = user_inputs.UserInputTwo(logging)
+                elif command_list[1] == "Three":
+                    user_input = user_inputs.UserInputThree(logging)
 
 
-                if commands[2] == "high":
+                if command_list[2] == "high":
                     result = user_input.test_high()
-                elif commands[2] == "low":
+                elif command_list[2] == "low":
                     result = user_input.test_low()
             
             # LEDs
-            elif commands[0] == "CCP_Ok":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ccp_ok(level)
-            elif commands[0] == "IED_Ok":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ied_ok(level)
-            elif commands[0] == "Fault":
-                level = True if commands[1] == "on" else False
-                result = leds.test_fault(level)
-            elif commands[0] == "CCP_Data_Tx":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ccp_data_tx(level)
-            elif commands[0] == "CCP_Data_Rx":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ccp_data_rx(level)
-            elif commands[0] == "IED_Data_Tx":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ied_data_tx(level)
-            elif commands[0] == "IED_Data_Rx":
-                level = True if commands[1] == "on" else False
-                result = leds.test_ied_data_rx(level)
+            elif command_list[0] == "LED":
+                if command_list[1] == "CCPOk":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_ok(level, logging)
+                elif command_list[1] == "IEDOk":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_ok(level, logging)
+                elif command_list[1] == "Fault":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_fault(level, logging)
+                elif command_list[1] == "CCPDataTx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_data_tx(level, logging)
+                elif command_list[1] == "CCPDataRx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_data_rx(level, logging)
+                elif command_list[1] == "IEDDataTx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_data_tx(level, logging)
+                elif command_list[1] == "IEDDataRx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_data_rx(level, logging)
 
             # comms
-            elif commands[0] == "CCP":
+            elif command_list[0] == "CCP":
                 com = comms.CCPComms()
-                if commands[1] == "TTL":
+                if command_list[1] == "TTL":
                     result = com.test_ttl()
-                elif commands[1] == "RS232":
+                elif command_list[1] == "RS232":
                     result = com.test_rs232()
-                elif commands[1] == "RS485":
+                elif command_list[1] == "RS485":
                     result = com.test_rs485()
-            elif commands[0] == "IED":
+            elif command_list[0] == "IED":
                 com = comms.IED_TTL()
-                if commands[1] == "TTL":
+                if command_list[1] == "TTL":
                     result = com.test_ttl()
-                elif commands[1] == "RS232":
+                elif command_list[1] == "RS232":
                     result = com.test_rs232()
-                elif commands[1] == "RS485":
+                elif command_list[1] == "RS485":
                     result = com.test_rs485()
 
-            self.sock.sendall(str(result))
+            message = "Sending back " + str(result)
+            logging.debug(message)
+            connection.sendall(str(result))
+            logging.info("Closing this TCP session")
+            connection.close()
+            logging.info("TCP session closed")
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
     def run(self):
         """Starts listening over TCP, and starts the test runner"""
         try:
+            logging.info("Starting socket")
             self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            logging.info("Binding socket")
             self.sock.bind(self.server_address)
-            self.sock.connect(self.server_address)
-            message = self.sock.recv(64) # should receive ack
-            self.sock.sendall(message.strip())
+            logging.info("Listening for an incoming connection")
+            self.sock.listen(1)
             self.test_runner()
         except ValueError as ex:
-            log = "Invalid number of arguments:" + ex
+            log = "Invalid number of arguments:" + str(ex)
+            logging.error(log)
+            sys.exit(2)
+        except Exception as ex:
+            log = "Unknown exception: " + str(ex)
             logging.error(log)
             sys.exit(2)
 
 
 def _main():
-    logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
-                        filemode='w', format='%(asctime): ')
     daemon = Daemon('/tests/pim_tests_daemon.pid')
     if len(sys.argv) == 2:
         if sys.argv[1] == 'stop':
@@ -245,6 +273,8 @@ def _main():
         # elif sys.argv[1] == 'restart':
         #     daemon.restart()
         else:
+            logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
+                                filemode='w', format='%(levelname)s: %(asctime)s %(message)s', level=logging.DEBUG)
             daemon.start()
         sys.exit(0)
     else:

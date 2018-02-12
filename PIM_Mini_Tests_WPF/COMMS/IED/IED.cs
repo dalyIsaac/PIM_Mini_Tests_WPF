@@ -20,7 +20,7 @@ namespace PIM_Mini_Tests_WPF.COMMS.IED
 
             string message = $"{this.Name}_{caller.Name}";
             var result = Controller.SendTcpMessage(message);
-            if (!caller.AssertEqual(result.ToString(), DaemonResponse.Success.ToString(), "")) return;
+            if (!caller.AssertEqual(result, DaemonResponse.Success, "")) return;
             caller.TestStatus = Status.Passed;
         }
 

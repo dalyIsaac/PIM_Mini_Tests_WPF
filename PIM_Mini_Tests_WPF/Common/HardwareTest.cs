@@ -176,7 +176,7 @@ namespace PIM_Mini_Tests_WPF.Common
                 Log.Logger.Information($"The child tests for the {this.Name} class are initializing");
                 foreach (var child in this.Children)
                 {
-                    if (child.Children == null) // if the child has no children, run the test
+                    if (child.Children.Count == 0) // if the child has no children, run the test
                     {
                     Log.Logger.Information($"Running {child.Name} test");
                     child.Test();
@@ -216,6 +216,30 @@ namespace PIM_Mini_Tests_WPF.Common
         }
 
         #region Assertions
+
+        /// <summary>
+        /// Asserts that two DaemonResponses are equal.
+        /// If the test passes, the TestStatus should be set by the caller.
+        /// If the test fails, TestStatus is set by this method.
+        /// </summary>
+        /// <param name="val1"></param>
+        /// <param name="val2"></param>
+        /// <param name="message">Error message for the user</param>
+        /// <returns>Boolean indicating whether the test was successful</returns>
+        public bool AssertEqual(DaemonResponse val1, DaemonResponse val2, string message)
+        {
+            if (val1 != val2)
+            {
+                this.TestStatus = Status.Failed;
+                this.ErrorMessage = message;
+                Log.Logger.Fatal($"{message} : {val1} != {val2}");
+            }
+            else
+            {
+                Log.Logger.Debug($"Success : {val1} == {val2}");
+            }
+            return val1 == val2;
+        }
 
         /// <summary>
         /// Asserts that two strings are equal.

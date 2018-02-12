@@ -41,7 +41,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
             }
             else
             {
-                caller.AssertEqual(result.ToString(), DaemonResponse.Success.ToString(), $"Could not set the {caller.Name} LED"); // this fails the test
+                caller.AssertEqual(result, DaemonResponse.Success, $"Could not set the {caller.Name} LED"); // this fails the test
             }
             var resetResult = this.SetLED(caller, false);
             if (!caller.AssertEqual(resetResult.ToString(), DaemonResponse.Success.ToString(), $"The {caller.Name} LED could not be turned off")) return;
@@ -51,7 +51,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
         internal DaemonResponse SetLED(HardwareTest caller, bool level)
         {
             string ledLevel = level == true ? "on" : "off";
-            return Controller.ExecuteTest(caller.Name.Replace(' ', '_') + " " + ledLevel);
+            return Controller.SendTcpMessage("LED_" + caller.Name.Replace(" ", "") + "_" + ledLevel);
         }
 
         public override void Test()

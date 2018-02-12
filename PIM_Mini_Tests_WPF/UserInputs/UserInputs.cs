@@ -30,7 +30,7 @@ namespace PIM_Mini_Tests_WPF.UserInputs
                 testName = "UserInput_Three";
             }
 
-            var result = Controller.ExecuteTest(testName + "_" + level);
+            var result = Controller.SendTcpMessage(testName + "_" + level);
             return result;
         }
 

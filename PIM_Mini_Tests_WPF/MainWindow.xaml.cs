@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PIM_Mini_Tests_WPF.Common;
+using System.Threading;
 
 namespace PIM_Mini_Tests_WPF
 {
@@ -38,9 +39,6 @@ namespace PIM_Mini_Tests_WPF
             tests = new ObservableCollection<HardwareTest>()
             {
                 new Startup.Startup(),
-                new EEPROM.EEPROM(),
-                new FRAM.FRAM(),
-                new RTC.RTC(),
                 new UserInputs.UserInputs(),
                 new LEDS.LEDS(),
                 new COMMS.CCP.CCP(),
@@ -94,18 +92,13 @@ namespace PIM_Mini_Tests_WPF
             {
                 test.ResetTestData();
             }
+            Controller.StartDaemon();
+            Thread.Sleep(3000);
             foreach (var test in this.tests)
             {
-                if (test.GetType() == typeof(UserInputs.UserInputs) && test.IsChecked != false) // if it's null, that includes when _some_ of the children are checked
-                {
-                    Controller.StartDaemon();
-                }
                 test.StartChildTests();
-                //if (test.GetType() == typeof(Comms.Comms))
-                //{
-                //    Controller.KillDaemon();
-                //}
             }
+            Controller.KillDaemonSSH();
         }
 
         /// <summary>
