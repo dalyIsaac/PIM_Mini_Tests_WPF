@@ -176,11 +176,11 @@ namespace PIM_Mini_Tests_WPF.Common
                 Log.Logger.Information($"The child tests for the {this.Name} class are initializing");
                 foreach (var child in this.Children)
                 {
-                    if (child.Children.Count == 0) // if the child has no children, run the test
+                    if (child.Children.Count == 0 && child.IsChecked == true) // if the child has no children, run the test
                     {
-                    Log.Logger.Information($"Running {child.Name} test");
-                    child.Test();
-                    Log.Logger.Information($"{child.Name} test has finished executing");
+                        Log.Logger.Information($"Running {child.Name} test");
+                        child.Test();
+                        Log.Logger.Information($"{child.Name} test has finished executing");
                     }
                     else // if the child has children, run the grandchildren tests
                     {

@@ -51,7 +51,7 @@ class SerialComms(object):
             self.logging.debug("Assigned RS232")
             self.rs485 = CCP_RS485
             self.logging.debug("Assigned RS485")
-            self.logging("Configured as CCP")
+            self.logging.debug("Configured as CCP")
         elif isinstance(self, IEDComms):
             self.logging.debug("Entered IED config")
             self.ttl = IED_TTL
@@ -60,7 +60,7 @@ class SerialComms(object):
             self.logging.debug("Assigned RS232")
             self.rs485 = IED_RS485
             self.logging.debug("Assigned RS485")
-            self.logging("Configured as IED")
+            self.logging.debug("Configured as IED")
         else:
             raise Exception("Invalid child class")
 
