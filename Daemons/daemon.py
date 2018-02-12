@@ -176,66 +176,66 @@ class Daemon(object):
             logging.info(message)
 
             result = "error"
-            commands = command.split("_")
-            output = "Split commands: " + str(commands)
-            logging.debug(commands)
+            command_list = command.split("_")
+            output = "Split commands: " + str(command_list)
+            logging.debug(output)
 
             # UserInput
             if command[0] == "UserInput":
                 logging.debug("Entered UserInput")
                 user_input = None
-                if commands[1] == "One":
+                if command_list[1] s== "One":
                     user_input = user_inputs.UserInputOne()
-                elif commands[1] == "Two":
+                elif command_list[1] == "Two":
                     user_input = user_input.UserInputTwo()
-                elif commands[1] == "Three":
+                elif command_list[1] == "Three":
                     user_input = user_input.UserInputThree()
 
 
-                if commands[2] == "high":
+                if command_list[2] == "high":
                     result = user_input.test_high()
-                elif commands[2] == "low":
+                elif command_list[2] == "low":
                     result = user_input.test_low()
             
             # LEDs
-            elif commands[0] == "CCP_Ok":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "CCP_Ok":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ccp_ok(level)
-            elif commands[0] == "IED_Ok":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "IED_Ok":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ied_ok(level)
-            elif commands[0] == "Fault":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "Fault":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_fault(level)
-            elif commands[0] == "CCP_Data_Tx":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "CCP_Data_Tx":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ccp_data_tx(level)
-            elif commands[0] == "CCP_Data_Rx":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "CCP_Data_Rx":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ccp_data_rx(level)
-            elif commands[0] == "IED_Data_Tx":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "IED_Data_Tx":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ied_data_tx(level)
-            elif commands[0] == "IED_Data_Rx":
-                level = True if commands[1] == "on" else False
+            elif command_list[0] == "IED_Data_Rx":
+                level = True if command_list[1] == "on" else False
                 result = leds.test_ied_data_rx(level)
 
             # comms
-            elif commands[0] == "CCP":
+            elif command_list[0] == "CCP":
                 com = comms.CCPComms()
-                if commands[1] == "TTL":
+                if command_list[1] == "TTL":
                     result = com.test_ttl()
-                elif commands[1] == "RS232":
+                elif command_list[1] == "RS232":
                     result = com.test_rs232()
-                elif commands[1] == "RS485":
+                elif command_list[1] == "RS485":
                     result = com.test_rs485()
-            elif commands[0] == "IED":
+            elif command_list[0] == "IED":
                 com = comms.IED_TTL()
-                if commands[1] == "TTL":
+                if command_list[1] == "TTL":
                     result = com.test_ttl()
-                elif commands[1] == "RS232":
+                elif command_list[1] == "RS232":
                     result = com.test_rs232()
-                elif commands[1] == "RS485":
+                elif command_list[1] == "RS485":
                     result = com.test_rs485()
 
             message = "Sending back " + result
