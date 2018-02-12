@@ -24,7 +24,7 @@ namespace PIM_Mini_Tests_WPF.Common
             }
             else
             {
-                var response = Controller.SendSSHMessage("python /tests/daemon.py start");   
+                var response = Controller.SendSSHMessage("python /tests/daemon.py start");
                 if (response != DaemonResponse.Success)
                 {
                     return response;
@@ -97,7 +97,7 @@ namespace PIM_Mini_Tests_WPF.Common
         }
 
         public static DaemonResponse KillDaemonSSH() => Controller.SendSSHMessage("python /tests/daemon.py stop");
-        
+
 
         internal static DaemonResponse SendTcpMessage(string message)
         {
@@ -191,7 +191,7 @@ namespace PIM_Mini_Tests_WPF.Common
 
                     ASCIIEncoding ascii = new ASCIIEncoding();
                     byte[] messageOut = ascii.GetBytes(test);
-                    Log.Information($"Transmitting {messageOut}");
+                    Log.Information($"Transmitting {messageOut.ToString()}");
                     dataStream.Write(messageOut, 0, messageOut.Length);
                     Log.Information("Data transmitted");
 
@@ -217,44 +217,14 @@ namespace PIM_Mini_Tests_WPF.Common
                     }
 
                     messageInStr = messageInStr.Trim();
+                    Log.Debug("Received " + messageInStr);
                     if (messageInStr != test)
                     {
                         return DaemonResponse.IncorrectResponse;
                     }
-
-                    now = DateTime.Now;
-                    waitTime = new TimeSpan(hours: 0, minutes: 5, seconds: 0);
-                    while (!dataStream.DataAvailable)
+                    else
                     {
-                        if (now + waitTime < DateTime.Now)
-                        {
-                            Log.Fatal("The daemon took too long to respond.");
-                            client.Close();
-                            return DaemonResponse.TimeOut;
-                        }
-                    }
-
-                    byte[] response = new byte[100];
-                    int responseLength = dataStream.Read(messageIn, 0, 100);
-                    string responseStr = "";
-                    foreach (var item in messageIn)
-                    {
-                        responseStr += Convert.ToChar(item);
-                    }
-
-                    responseStr = responseStr.Trim();
-
-                    switch (responseStr)
-                    {
-                        case "pin set":
-                            Log.Information("The pin was successfully set.");
-                            return DaemonResponse.Success;
-                        case "pin fail":
-                            Log.Fatal("The pin could not be set");
-                            return DaemonResponse.PinSetFailed;
-                        default:
-                            Log.Fatal($"Unknown response: {responseStr}");
-                            return DaemonResponse.IncorrectResponse;
+                        return DaemonResponse.Success;
                     }
                 }
                 catch (ArgumentNullException ex)
