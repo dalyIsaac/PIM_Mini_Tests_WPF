@@ -162,15 +162,10 @@ class Daemon(object):
         time_to_stop = datetime.now() + timedelta(minutes=2)
         logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
-            logging.info("Starting to listen")
-            command = ""
-            while command.strip() == "":
-                message = "Received '" + command + "'"
-                logging.info(message) 
-                command = self.sock.recv(64) # TCP receives here
-                if time_to_stop < datetime.now():
-                    logging.info("Timeout")
-                    self.stop()
+            logging.info("Waiting for a connection")
+            self.sock = self.sock.accept()[0]
+            logging.info("Waiting for data")
+            command = self.sock.recv(64) # TCP receives here
             command = command.strip()
             output = "Received " + command
             logging.info(output)
@@ -241,6 +236,7 @@ class Daemon(object):
             message = "Sending back" + result
             logging.info(message)
             self.sock.sendall(str(result))
+            self.sock.close()
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
@@ -263,6 +259,8 @@ class Daemon(object):
             output = "Sending " + message + " back"
             logging.info(output)
             self.sock.sendall(message.strip())
+            logging.info("Closing this TCP session")
+            self.sock.close()
             logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
