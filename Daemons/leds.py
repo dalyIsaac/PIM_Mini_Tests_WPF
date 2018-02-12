@@ -6,15 +6,14 @@ IN = "in"
 OUT = "out"
 HIGH = "high"
 LOW = "low"
-PRESERVE = "preserve"
 
-CCP_OK = GPIO(pin=13, direction=PRESERVE)
-IED_OK = GPIO(pin=12, direction=PRESERVE)
-FAULT = GPIO(pin=11, direction=PRESERVE)
-CCP_DATA_TX = GPIO(pin=25, direction=PRESERVE)
-CCP_DATA_RX = GPIO(pin=24, direction=PRESERVE)
-IED_DATA_TX = GPIO(pin=5, direction=PRESERVE)
-IED_DATA_RX = GPIO(pin=4, direction=PRESERVE)
+CCP_OK = GPIO(pin=13, direction=OUT)
+IED_OK = GPIO(pin=12, direction=OUT)
+FAULT = GPIO(pin=11, direction=OUT)
+CCP_DATA_TX = GPIO(pin=25, direction=OUT)
+CCP_DATA_RX = GPIO(pin=24, direction=OUT)
+IED_DATA_TX = GPIO(pin=5, direction=OUT)
+IED_DATA_RX = GPIO(pin=4, direction=OUT)
 
 
 def test_ccp_ok(level):
