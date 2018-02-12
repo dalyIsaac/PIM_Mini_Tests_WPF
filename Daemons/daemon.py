@@ -181,7 +181,7 @@ class Daemon(object):
             logging.debug(output)
 
             # UserInput
-            if command[0] == "UserInput":
+            if command_list[0] == "UserInput":
                 logging.debug("Entered UserInput")
                 user_input = None
                 if command_list[1] == "One":
