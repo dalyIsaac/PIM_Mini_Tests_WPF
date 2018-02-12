@@ -220,20 +220,28 @@ class Daemon(object):
 
             # comms
             elif command_list[0] == "CCP":
-                com = comms.CCPComms()
+                logging.debug("Entered CCP")
+                com = comms.CCPComms(logging)
                 if command_list[1] == "TTL":
+                    logging.debug("Entered TTL")
                     result = com.test_ttl()
                 elif command_list[1] == "RS232":
+                    logging.debug("Entered RS232")
                     result = com.test_rs232()
                 elif command_list[1] == "RS485":
+                    logging.debug("Entered RS485")
                     result = com.test_rs485()
             elif command_list[0] == "IED":
-                com = comms.IED_TTL()
+                logging.debug("Entered IED")
+                com = comms.IED_TTL(logging)
                 if command_list[1] == "TTL":
+                    logging.debug("Entered TTL")
                     result = com.test_ttl()
                 elif command_list[1] == "RS232":
+                    logging.debug("Entered RS232")
                     result = com.test_rs232()
                 elif command_list[1] == "RS485":
+                    logging.debug("Entered RS485")
                     result = com.test_rs485()
 
             message = "Sending back " + str(result)
