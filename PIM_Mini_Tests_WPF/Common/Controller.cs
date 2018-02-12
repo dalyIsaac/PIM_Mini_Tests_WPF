@@ -52,7 +52,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     client.Connect();
                     Log.Information("SSH connected.");
                     var startCommand = client.CreateCommand(message);
-                    startCommand.Execute();
+                    startCommand.BeginExecute();
                     Log.Information($"Command '{message}' sent and executed");
                     Controller.IsDaemonStarted = true;
                     return DaemonResponse.Success;
