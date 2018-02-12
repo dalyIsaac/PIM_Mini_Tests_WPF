@@ -32,7 +32,7 @@ namespace PIM_Mini_Tests_WPF.UserInputs
             }
 
             var result = Controller.SendTcpMessage(testName + "_" + level);
-            Controller.KillDaemonTcp();
+            Controller.KillDaemonSSH();
             return result;
         }
 

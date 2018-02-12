@@ -47,7 +47,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
             var resetResult = this.SetLED(caller, false);
             if (!caller.AssertEqual(resetResult.ToString(), DaemonResponse.Success.ToString(), $"The {caller.Name} LED could not be turned off")) return;
             caller.TestStatus = Status.Passed;
-            Controller.KillDaemonTcp();
+            Controller.KillDaemonSSH();
         }
 
         internal DaemonResponse SetLED(HardwareTest caller, bool level)
