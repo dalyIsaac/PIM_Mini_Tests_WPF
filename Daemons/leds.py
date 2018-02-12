@@ -16,32 +16,20 @@ IED_DATA_TX = GPIO(pin=5, direction=OUT)
 IED_DATA_RX = GPIO(pin=4, direction=OUT)
 
 
-def test_ccp_ok(level):
+def test_ccp_ok(level, logging):
     """Tests that the CCP OK LED can be turned on"""
     #return _test(CCP_OK, level)
-    try:
-        pin = CCP_OK.write(level)
-        return True
-    except:
-        return False
+    return _write(CCP_OK, level, logging)
 
-def test_ied_ok(level):
+def test_ied_ok(level, logging):
     """Tests that the IED OK LED can be turned on"""
     #return _test(IED_OK, level)
-    try:
-        pin = IED_OK.write(level)
-        return True
-    except: 
-        return False
+    return _write(IED_OK, level, logging)
 
-def test_fault(level):
+def test_fault(level, logging):
     """Tests that the Fault LED can be turned on"""
     #return _test(FAULT, level)
-    try:
-        pin = FAULT.write(IED_OK, level)
-        return True
-    except:
-        return False
+    return _write(FAULT, level, logging)
 
 def test_ccp_data_tx(level):
     """Tests that the CCP Data Tx (transmit) LED can be turned on"""
@@ -58,6 +46,15 @@ def test_ied_data_tx(level):
 def test_ied_data_rx(level):
     """Tests that the IED Data Rx (receive) LED can be turned on"""
     return _test(IED_DATA_RX, level)
+
+def _write(pin, level, logging):
+    try:
+        pin.write(level)
+        logging.debug("Success")
+        return True
+    except Exception as ex:
+        logging.error(ex)
+        return False
 
 def _test(pin, level):
     pin.write(level)
