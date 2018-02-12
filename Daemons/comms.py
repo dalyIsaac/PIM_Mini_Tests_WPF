@@ -84,10 +84,13 @@ class SerialComms(object):
         try:
             self.logging.debug("Opening port")
             comm.open()
-            self.logging.debug("Writing")
+            message = "Writing: " + TEST_STRING
+            self.logging.debug(message)
             comm.write(TEST_STRING)
             self.logging.debug("Reading")
             output = str(comm.read_all())
+            message = "Read: " + output
+            self.logging.debug(message)
             if output == TEST_STRING:
                 self.logging.debug("Data written is the same as data read")
                 return True
