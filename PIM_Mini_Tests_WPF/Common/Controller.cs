@@ -30,9 +30,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     return response;
                 }
             }
-
-            var message = "ack";
-            return Controller.SendTcpMessage(message);
+            return DaemonResponse.Success;
         }
 
         private static DaemonResponse SendSSHMessage(string message)

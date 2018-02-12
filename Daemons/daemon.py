@@ -171,9 +171,6 @@ class Daemon(object):
             command = command.strip()
             output = "Received '" + command + "'"
             logging.info(output)
-            connection.sendall(command)
-            message = "Ack: " + command
-            logging.info(message)
 
             result = "error"
             command_list = command.split("_")
@@ -256,22 +253,6 @@ class Daemon(object):
             self.sock.bind(self.server_address)
             logging.info("Listening for an incoming connection")
             self.sock.listen(1)
-            logging.info("Waiting for a connection")
-
-
-            connection, client_address = self.sock.accept()
-            output = "Connection from " + str(client_address)
-            logging.info(output)
-
-            logging.info("Receiving data")
-            message = connection.recv(64) # should receive ack
-            output = "Sending " + message + " back"
-            logging.info(output)
-            connection.sendall(message.strip())
-            logging.info("Closing this TCP session")
-            connection.close()
-            logging.info("TCP session closed")
-            logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
             log = "Invalid number of arguments:" + str(ex)
