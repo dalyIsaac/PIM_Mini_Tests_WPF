@@ -233,7 +233,7 @@ class Daemon(object):
                     result = com.test_rs485()
             elif command_list[0] == "IED":
                 logging.debug("Entered IED")
-                com = comms.IED_TTL(logging)
+                com = comms.IEDComms(logging)
                 if command_list[1] == "TTL":
                     logging.debug("Entered TTL")
                     result = com.test_ttl()
