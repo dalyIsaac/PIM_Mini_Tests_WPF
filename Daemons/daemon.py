@@ -195,27 +195,28 @@ class Daemon(object):
                     result = user_input.test_low()
             
             # LEDs
-            elif command_list[0] == "CCP_Ok":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ccp_ok(level)
-            elif command_list[0] == "IED_Ok":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ied_ok(level)
-            elif command_list[0] == "Fault":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_fault(level)
-            elif command_list[0] == "CCP_Data_Tx":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ccp_data_tx(level)
-            elif command_list[0] == "CCP_Data_Rx":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ccp_data_rx(level)
-            elif command_list[0] == "IED_Data_Tx":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ied_data_tx(level)
-            elif command_list[0] == "IED_Data_Rx":
-                level = True if command_list[1] == "on" else False
-                result = leds.test_ied_data_rx(level)
+            elif command_list[0] == "LED":
+                if command_list[1] == "CCPOk":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_ok(level)
+                elif command_list[1] == "IEDOk":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_ok(level)
+                elif command_list[1] == "Fault":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_fault(level)
+                elif command_list[1] == "CCPDataTx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_data_tx(level)
+                elif command_list[1] == "CCPDataRx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ccp_data_rx(level)
+                elif command_list[1] == "IEDDataTx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_data_tx(level)
+                elif command_list[1] == "IEDDataRx":
+                    level = True if command_list[2] == "on" else False
+                    result = leds.test_ied_data_rx(level)
 
             # comms
             elif command_list[0] == "CCP":
