@@ -9,17 +9,22 @@ LOW = "low"
 PRESERVE = "preserve"
 
 
+USER_INPUT_1 = GPIO(pin=85, direction=OUT)
+USER_INPUT_2 = GPIO(pin=86, direction=OUT)
+USER_INPUT_3 = GPIO(pin=90, direction=OUT)
+
+
 class UserInputs(object):
     """Tests that values can be written and read from a GPIO pin"""
 
     def __init__(self):
-        self.pin = None
+        self.gpio = None
         if isinstance(self, UserInputOne):
-            self.pin = 85
+            self.gpio = USER_INPUT_1
         elif isinstance(self, UserInputTwo):
-            self.pin = 86
+            self.gpio = USER_INPUT_2
         elif isinstance(self, UserInputThree):
-            self.pin = 90
+            self.gpio = USER_INPUT_3
 
     def test_high(self):
         """Tests that high values can be written and read from the GPIO pin"""
@@ -30,16 +35,10 @@ class UserInputs(object):
         return self._test(False)
 
     def _test(self, level):
-        """level: bool"""
-        try:
-            gpio_in = GPIO(pin=self.pin, direction=IN)
-            gpio_in.write(level)
-            gpio_out = GPIO(pin=self.pin, direction=OUT)
-            if gpio_out.read() is level:
-                return str(True)
-            return str(False)
-        except:
-            return str(False)
+        self.gpio.write(level)
+        if self.gpio.read() is level:
+            return True
+        return False
 
 
 class UserInputOne(UserInputs):

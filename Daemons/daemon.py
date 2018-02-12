@@ -187,9 +187,9 @@ class Daemon(object):
                 if command_list[1] == "One":
                     user_input = user_inputs.UserInputOne()
                 elif command_list[1] == "Two":
-                    user_input = user_input.UserInputTwo()
+                    user_input = user_inputs.UserInputTwo()
                 elif command_list[1] == "Three":
-                    user_input = user_input.UserInputThree()
+                    user_input = user_inputs.UserInputThree()
 
 
                 if command_list[2] == "high":
