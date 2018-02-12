@@ -88,16 +88,22 @@ class SerialComms(object):
             self.logging.debug(message)
             comm.write(TEST_STRING)
             self.logging.debug("Reading")
-            output = str(comm.read_all())
+            output = str(comm.read(len(TEST_STRING)))
             message = "Read: " + output
             self.logging.debug(message)
             if output == TEST_STRING:
                 self.logging.debug("Data written is the same as data read")
+                comm.close()
                 return True
             self.logging.debug("Data written is not the same as data read")
+            comm.close()
             return False
         except Exception as ex:
             self.logging.fatal(ex)
+            try:
+                comm.close()
+            except:
+                pass
             return False
 
 
