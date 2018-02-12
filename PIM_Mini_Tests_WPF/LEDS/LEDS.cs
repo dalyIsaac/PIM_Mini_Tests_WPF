@@ -41,7 +41,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
             }
             else
             {
-                caller.AssertEqual(result.ToString(), DaemonResponse.Success.ToString(), $"Could not set the {caller.Name} LED"); // this fails the test
+                caller.AssertEqual(result, DaemonResponse.Success, $"Could not set the {caller.Name} LED"); // this fails the test
             }
             var resetResult = this.SetLED(caller, false);
             if (!caller.AssertEqual(resetResult.ToString(), DaemonResponse.Success.ToString(), $"The {caller.Name} LED could not be turned off")) return;
