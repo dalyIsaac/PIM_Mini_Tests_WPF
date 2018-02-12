@@ -169,7 +169,7 @@ class Daemon(object):
             logging.info("Waiting for data")
             command = connection.recv(64) # TCP receives here
             command = command.strip()
-            output = "Received " + command
+            output = "Received '" + command + "'"
             logging.info(output)
             connection.sendall(command)
             message = "Ack: " + command
@@ -177,9 +177,12 @@ class Daemon(object):
 
             result = "error"
             commands = command.split("_")
-            
+            output = "Split commands: " + str(commands)
+            logging.debug(commands)
+
             # UserInput
             if command[0] == "UserInput":
+                logging.debug("Entered UserInput")
                 user_input = None
                 if commands[1] == "One":
                     user_input = user_inputs.UserInputOne()
@@ -235,10 +238,12 @@ class Daemon(object):
                 elif commands[1] == "RS485":
                     result = com.test_rs485()
 
-            message = "Sending back" + result
+            message = "Sending back " + result
             logging.info(message)
             connection.sendall(str(result))
+            logging.info("Closing this TCP session")
             connection.close()
+            logging.info("TCP session closed")
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
@@ -265,6 +270,7 @@ class Daemon(object):
             connection.sendall(message.strip())
             logging.info("Closing this TCP session")
             connection.close()
+            logging.info("TCP session closed")
             logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
