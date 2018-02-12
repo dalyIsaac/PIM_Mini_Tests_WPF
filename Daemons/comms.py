@@ -24,7 +24,7 @@ IED_RS485.port = "/dev/ttymx4"
 TEST_STRING = b"The quick brown fox jumps over the lazy dog 0123456789"
 
 
-class SerialComms():
+class SerialComms(object):
     """
     Tests the serial communications of the child class.  
     : DO NOT DIRECTLY USE THIS CLASS FOR TESTING.  ALWAYS IMPLEMENT A CHILD CLASS IN THE FORMAT: :

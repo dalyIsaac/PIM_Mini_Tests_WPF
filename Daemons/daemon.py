@@ -220,7 +220,7 @@ class Daemon(object):
 
             # comms
             elif command_list[0] == "CCP":
-                com = comms.CCPComms()
+                com = comms.CCPComms(logging)
                 if command_list[1] == "TTL":
                     result = com.test_ttl()
                 elif command_list[1] == "RS232":
@@ -228,7 +228,7 @@ class Daemon(object):
                 elif command_list[1] == "RS485":
                     result = com.test_rs485()
             elif command_list[0] == "IED":
-                com = comms.IED_TTL()
+                com = comms.IED_TTL(logging)
                 if command_list[1] == "TTL":
                     result = com.test_ttl()
                 elif command_list[1] == "RS232":
