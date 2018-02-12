@@ -236,7 +236,7 @@ class Daemon(object):
                 elif command_list[1] == "RS485":
                     result = com.test_rs485()
 
-            message = "Sending back " + result
+            message = "Sending back " + str(result)
             logging.debug(message)
             connection.sendall(str(result))
             logging.info("Closing this TCP session")
