@@ -1,6 +1,6 @@
 """Tests that GPIO pins can be written to and read from"""
 
-from periphery import GPIO  # pylint: disable=W0403
+from gpio import GPIO
 
 IN = "in"
 OUT = "out"
@@ -30,7 +30,8 @@ class UserInputs(object):
         return self._test(False)
 
     def _test(self, level):
-        self.gpio.write(level)
+        try:
+            os.write(self.gpio._fd, )
         output = ""
         if self.gpio.read() is level:
             output = str(True)

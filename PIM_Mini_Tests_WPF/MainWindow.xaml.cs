@@ -93,15 +93,7 @@ namespace PIM_Mini_Tests_WPF
             }
             foreach (var test in this.tests)
             {
-                if (test.GetType() == typeof(UserInputs.UserInputs) && test.IsChecked != false) // if it's null, that includes when _some_ of the children are checked
-                {
-                    Controller.StartDaemon();
-                }
                 test.StartChildTests();
-                //if (test.GetType() == typeof(Comms.Comms))
-                //{
-                //    Controller.KillDaemon();
-                //}
             }
         }
 

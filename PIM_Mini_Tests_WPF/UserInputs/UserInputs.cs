@@ -16,6 +16,7 @@ namespace PIM_Mini_Tests_WPF.UserInputs
 
         internal DaemonResponse Check(Type caller, string level)
         {
+            Controller.StartDaemon();
             string testName = "";
             if (caller == typeof(TestUserInputOne))
             {
@@ -31,6 +32,7 @@ namespace PIM_Mini_Tests_WPF.UserInputs
             }
 
             var result = Controller.SendTcpMessage(testName + "_" + level);
+            Controller.KillDaemonTcp();
             return result;
         }
 
