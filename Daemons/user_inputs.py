@@ -36,10 +36,10 @@ class UserInputs(object):
             gpio_in.write(level)
             gpio_out = GPIO(pin=self.pin, direction=OUT)
             if gpio_out.read() is level:
-                return True
-            return False
+                return str(True)
+            return str(False)
         except:
-            return False
+            return str(False)
 
 
 class UserInputOne(UserInputs):
