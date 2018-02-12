@@ -134,7 +134,7 @@ namespace PIM_Mini_Tests_WPF.Common
                     foreach (var item in messageIn)
                     {
                         var converted = Convert.ToChar(item);
-                        if (converted < 128)
+                        if (converted != 0)
                         {
                             messageInStr += Convert.ToChar(item);
                         }
