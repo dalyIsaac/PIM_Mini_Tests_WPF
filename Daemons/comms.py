@@ -34,13 +34,15 @@ class SerialComms(object):
         self.ttl = None
         self.rs232 = None
         self.rs485 = None
-        self.configure()
+        logging.debug("Initialized")
         self.logging = logging
+        self.configure()
 
     def configure(self):
         """
         Configures the serial port
         """
+        self.logging.debug("Configuring")
         if isinstance(self, CCPComms):
             self.ttl = CCP_TTL
             self.rs232 = CCP_RS232
