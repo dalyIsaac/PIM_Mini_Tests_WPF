@@ -62,12 +62,12 @@ def _test(pin, level, logging):
         logging.debug("Value written")
         val = pin.read()
         if val is level:
-            self.logging.debug("Value read is the one same as the one written")
+            logging.debug("Value read is the one same as the one written")
             return True
         else:
             message = "Value read is different to the one written: " + str(val) + " != " + str(level)
-            self.logging.fatal()
+            logging.fatal()
             return False
     except Exception as ex:
-        self.logging.fatal(ex)
+        logging.fatal(ex)
         return False
