@@ -163,15 +163,15 @@ class Daemon(object):
         logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Waiting for a connection")
-            sock, client_address = self.sock.accept()[0]
+            connection, client_address = self.sock.accept()
             message = "Accepted connection from " + client_address
             logging.info(message)
             logging.info("Waiting for data")
-            command = sock.recv(64) # TCP receives here
+            command = connection.recv(64) # TCP receives here
             command = command.strip()
             output = "Received " + command
             logging.info(output)
-            sock.sendall(command)
+            connection.sendall(command)
             message = "Ack: " + command
             logging.info(message)
 
@@ -237,8 +237,8 @@ class Daemon(object):
 
             message = "Sending back" + result
             logging.info(message)
-            sock.sendall(str(result))
-            sock.close()
+            connection.sendall(str(result))
+            connection.close()
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
@@ -246,23 +246,25 @@ class Daemon(object):
         """Starts listening over TCP, and starts the test runner"""
         try:
             logging.info("Starting socket")
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             logging.info("Binding socket")
-            sock.bind(self.server_address)
+            self.sock.bind(self.server_address)
             logging.info("Listening for an incoming connection")
-            sock.listen(1)
+            self.sock.listen(1)
             logging.info("Waiting for a connection")
-            self.sock, client_address = sock.accept()
+
+
+            connection, client_address = self.sock.accept()
             output = "Connection from " + str(client_address)
             logging.info(output)
 
             logging.info("Receiving data")
-            message = self.sock.recv(64) # should receive ack
+            message = connection.recv(64) # should receive ack
             output = "Sending " + message + " back"
             logging.info(output)
-            self.sock.sendall(message.strip())
+            connection.sendall(message.strip())
             logging.info("Closing this TCP session")
-            self.sock.close()
+            connection.close()
             logging.info("Starting test runner")
             self.test_runner()
         except ValueError as ex:
