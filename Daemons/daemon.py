@@ -120,10 +120,14 @@ class Daemon(object):
         """
         # Get the pid from the pidfile
         try:
+            logging.info("Retrieving the pid")
             pid_file = file(self.pidfile, 'r')
             pid = int(pid_file.read().strip())
+            logging.info("Closing the pid file")
             pid_file.close()
+            logging.info("Pid file closed")
         except IOError:
+            logging.error("IOError")
             pid = None
 
         if not pid:
@@ -280,7 +284,7 @@ def _main():
         #     daemon.restart()
         else:
             logging.basicConfig(filename="/tests/pim_tests_daemon " + str(datetime.now()).replace(":", "-") + ".log",
-                                filemode='w', format='%(levelname)s: %(message)s', level=logging.DEBUG)
+                                filemode='w', format='%(levelname)s: %(asctime)s %(message)s', level=logging.DEBUG)
             daemon.start()
         sys.exit(0)
     else:
