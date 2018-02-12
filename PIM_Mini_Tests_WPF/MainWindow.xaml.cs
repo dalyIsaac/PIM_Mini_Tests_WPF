@@ -91,10 +91,12 @@ namespace PIM_Mini_Tests_WPF
             {
                 test.ResetTestData();
             }
+            Controller.StartDaemon();
             foreach (var test in this.tests)
             {
                 test.StartChildTests();
             }
+            Controller.KillDaemonSSH();
         }
 
         /// <summary>
