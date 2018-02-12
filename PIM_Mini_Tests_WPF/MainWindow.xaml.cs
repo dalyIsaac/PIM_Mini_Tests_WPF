@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using PIM_Mini_Tests_WPF.Common;
+using System.Threading;
 
 namespace PIM_Mini_Tests_WPF
 {
@@ -92,6 +93,7 @@ namespace PIM_Mini_Tests_WPF
                 test.ResetTestData();
             }
             Controller.StartDaemon();
+            Thread.Sleep(3000);
             foreach (var test in this.tests)
             {
                 test.StartChildTests();
