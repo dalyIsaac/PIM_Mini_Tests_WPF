@@ -15,7 +15,7 @@ namespace PIM_Mini_Tests_WPF.COMMS.IED
 
         internal void Check(HardwareTest caller)
         {
-            var status = caller.GetUserInput($"Is the PIM Mini ready for the CCP {caller.Name} test?");
+            var status = caller.GetUserInput($"Is the PIM Mini ready for the IED {caller.Name} test?");
             if (!caller.AssertEqual(true, status, "The user indicated that the test is not ready.")) return;
 
             string message = $"{this.Name}_{caller.Name}";
