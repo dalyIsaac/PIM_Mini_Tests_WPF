@@ -160,7 +160,7 @@ class Daemon(object):
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Starting to listen")
             command = ""
-            while command.strip() != "":
+            while command.strip() == "":
                 message = "Received '" + command + "'"
                 logging.info(message) 
                 command = self.sock.recv(64) # TCP receives here
