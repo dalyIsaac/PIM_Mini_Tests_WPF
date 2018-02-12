@@ -164,7 +164,7 @@ class Daemon(object):
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Waiting for a connection")
             connection, client_address = self.sock.accept()
-            message = "Accepted connection from " + client_address
+            message = "Accepted connection from " + str(client_address)
             logging.info(message)
             logging.info("Waiting for data")
             command = connection.recv(64) # TCP receives here
