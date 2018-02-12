@@ -53,15 +53,15 @@ class SerialComms():
 
     def test_ttl(self):
         """Tests that data can be written and read over TTL"""
-        self._test(self.ttl)
+        return self._test(self.ttl)
 
     def test_rs232(self):
         """Tests that data can be written and read over RS-232"""
-        self._test(self.rs232)
+        return self._test(self.rs232)
 
     def test_rs485(self):
         """Tests that data can be written and read over RS-485"""
-        self._test(self.rs485)
+        return self._test(self.rs485)
 
     def _test(self, comm):
         """Writes, reads, and ensures that the output is correct for the serial device"""
