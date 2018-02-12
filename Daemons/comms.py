@@ -30,11 +30,12 @@ class SerialComms():
     : DO NOT DIRECTLY USE THIS CLASS FOR TESTING.  ALWAYS IMPLEMENT A CHILD CLASS IN THE FORMAT: :
     `class ChildClass(SerialComms): pass`"""
 
-    def __init__(self):
+    def __init__(self, logging):
         self.ttl = None
         self.rs232 = None
         self.rs485 = None
         self.configure()
+        self.logging = logging
 
     def configure(self):
         """
@@ -44,35 +45,46 @@ class SerialComms():
             self.ttl = CCP_TTL
             self.rs232 = CCP_RS232
             self.rs485 = CCP_RS485
+            self.logging("Configured as CCP")
         elif isinstance(self, IEDComms):
             self.ttl = IED_TTL
             self.rs232 = IED_RS232
             self.rs485 = IED_RS485
+            self.logging("Configured as IED")
         else:
             raise Exception("Invalid child class")
 
     def test_ttl(self):
         """Tests that data can be written and read over TTL"""
+        self.logging("TTL test")
         return self._test(self.ttl)
 
     def test_rs232(self):
         """Tests that data can be written and read over RS-232"""
+        self.logging("RS-232 test")
         return self._test(self.rs232)
 
     def test_rs485(self):
         """Tests that data can be written and read over RS-485"""
+        self.logging("RS-485 test")
         return self._test(self.rs485)
 
     def _test(self, comm):
         """Writes, reads, and ensures that the output is correct for the serial device"""
         try:
+            self.logging.debug("Opening port")
             comm.open()
+            self.logging.debug("Writing")
             comm.write(TEST_STRING)
+            self.logging.debug("Reading")
             output = str(comm.read_all())
             if output == TEST_STRING:
+                self.logging.debug("Data written is the same as data read")
                 return True
+            self.logging.debug("Data written is not the same as data read")
             return False
-        except:
+        except Exception as ex:
+            self.logging.fatal(ex)
             return False
 
 
