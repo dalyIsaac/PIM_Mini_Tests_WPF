@@ -37,8 +37,8 @@ class UserInputs(object):
     def _test(self, level):
         self.gpio.write(level)
         if self.gpio.read() is level:
-            return True
-        return False
+            return str(True)
+        return str(False)
 
 
 class UserInputOne(UserInputs):
