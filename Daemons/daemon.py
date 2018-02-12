@@ -70,14 +70,14 @@ class Daemon(object):
 
         # redirect standard file descriptors
         logging.info("Redirecting standard file descriptors")
-        # sys.stdout.flush()
-        # sys.stderr.flush()
+        sys.stdout.flush()
+        sys.stderr.flush()
         sys_in_file = file(self.stdin, 'r')
-        # sys_out_file = file(self.stdout, 'a+')
-        # sys_err_file = file(self.stderr, 'a+', 0)
+        sys_out_file = file(self.stdout, 'a+')
+        sys_err_file = file(self.stderr, 'a+', 0)
         os.dup2(sys_in_file.fileno(), sys.stdin.fileno())
-        # os.dup2(sys_out_file.fileno(), sys.stdout.fileno())
-        # os.dup2(sys_err_file.fileno(), sys.stderr.fileno())
+        os.dup2(sys_out_file.fileno(), sys.stdout.fileno())
+        os.dup2(sys_err_file.fileno(), sys.stderr.fileno())
 
         # write pidfile
         logging.info("Writing pidfile")
@@ -161,6 +161,8 @@ class Daemon(object):
             logging.info("Starting to listen")
             command = ""
             while command.strip() != "":
+                message = "Received " + command
+                logging.info(message) 
                 command = self.sock.recv(64) # TCP receives here
                 if time_to_stop > datetime.now():
                     logging.info("Timeout")
