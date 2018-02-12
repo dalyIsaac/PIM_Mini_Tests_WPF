@@ -163,13 +163,15 @@ class Daemon(object):
         logging.info("Starting countdown")
         while command != "stop" and time_to_stop > datetime.now():
             logging.info("Waiting for a connection")
-            self.sock = self.sock.accept()[0]
+            sock, client_address = self.sock.accept()[0]
+            message = "Accepted connection from " + client_address
+            logging.info(message)
             logging.info("Waiting for data")
-            command = self.sock.recv(64) # TCP receives here
+            command = sock.recv(64) # TCP receives here
             command = command.strip()
             output = "Received " + command
             logging.info(output)
-            self.sock.sendall(command)
+            sock.sendall(command)
             message = "Ack: " + command
             logging.info(message)
 
@@ -235,8 +237,8 @@ class Daemon(object):
 
             message = "Sending back" + result
             logging.info(message)
-            self.sock.sendall(str(result))
-            self.sock.close()
+            sock.sendall(str(result))
+            sock.close()
             time_to_stop = datetime.now() + timedelta(minutes=2)
         self.stop()
 
