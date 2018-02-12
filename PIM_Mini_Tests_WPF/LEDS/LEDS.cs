@@ -51,7 +51,7 @@ namespace PIM_Mini_Tests_WPF.LEDS
         internal DaemonResponse SetLED(HardwareTest caller, bool level)
         {
             string ledLevel = level == true ? "on" : "off";
-            return Controller.ExecuteTest(caller.Name.Replace(' ', '_') + " " + ledLevel);
+            return Controller.SendTcpMessage(caller.Name.Replace(' ', '_') + " " + ledLevel);
         }
 
         public override void Test()
