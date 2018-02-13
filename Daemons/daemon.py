@@ -220,25 +220,25 @@ class Daemon(object):
 
             # comms
             elif command_list[0] == "comms":
-                if command_list[0] == "CCP":
+                if command_list[1] == "CCP":
                     logging.debug("Entered CCP")
                     com = comms.CCPComms(logging)
-                elif command_list[0] == "IED":
+                elif command_list[1] == "IED":
                     logging.debug("Entered IED")
                     com = comms.IEDComms(logging)
 
-                if command_list[1] == "RS232":
+                if command_list[2] == "RS232":
                     logging.debug("Entered RS232")
-                    if command_list[2] == "rudeWrite":
+                    if command_list[3] == "rudeWrite":
                         logging.debug("Entered rude write")
                         com.test_rs232_rude_write()
-                    elif command_list[2] == "rudeReceive":
+                    elif command_list[3] == "rudeReceive":
                         logging.debug("Entered rude receive")
                         com.test_rs232_rude_receive()
-                    elif command_list[2] == "politeWrite":
+                    elif command_list[3] == "politeWrite":
                         logging.debug("Entered polite write")
                         com.test_rs232_polite_write()
-                    elif command_list[2] == "politeReceive":
+                    elif command_list[3] == "politeReceive":
                         logging.debug("Entered polite receive")
                         com.test_rs232_polite_receive()
 
