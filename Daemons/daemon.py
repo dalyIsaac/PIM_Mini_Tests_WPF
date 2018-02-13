@@ -219,28 +219,30 @@ class Daemon(object):
                     result = leds.test_ied_data_rx(level, logging)
 
             # comms
-            elif command_list[0] == "CCP":
-                logging.debug("Entered CCP")
-                com = comms.CCPComms(logging)
-                if command_list[1] == "TTL":
-                    logging.debug("Entered TTL")
-                    result = com.test_ttl()
-                elif command_list[1] == "RS232":
+            elif command_list[0] == "comms":
+                if command_list[0] == "CCP":
+                    logging.debug("Entered CCP")
+                    com = comms.CCPComms(logging)
+                elif command_list[0] == "IED":
+                    logging.debug("Entered IED")
+                    com = comms.IEDComms(logging)
+
+                if command_list[1] == "RS232":
                     logging.debug("Entered RS232")
-                    result = com.test_rs232()
-                elif command_list[1] == "RS485":
-                    logging.debug("Entered RS485")
-                    result = com.test_rs485()
-            elif command_list[0] == "IED":
-                logging.debug("Entered IED")
-                com = comms.IEDComms(logging)
-                if command_list[1] == "TTL":
-                    logging.debug("Entered TTL")
-                    result = com.test_ttl()
-                elif command_list[1] == "RS232":
-                    logging.debug("Entered RS232")
-                    result = com.test_rs232()
-                elif command_list[1] == "RS485":
+                    if command_list[2] == "rudeWrite":
+                        logging.debug("Entered rude write")
+                        com.test_rs232_rude_write()
+                    elif command_list[2] == "rudeReceive":
+                        logging.debug("Entered rude receive")
+                        com.test_rs232_rude_receive()
+                    elif command_list[2] == "politeWrite":
+                        logging.debug("Entered polite write")
+                        com.test_rs232_polite_write()
+                    elif command_list[2] == "politeReceive":
+                        logging.debug("Entered polite receive")
+                        com.test_rs232_polite_receive()
+
+                if command_list[1] == "RS485":
                     logging.debug("Entered RS485")
                     result = com.test_rs485()
 

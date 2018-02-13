@@ -9,16 +9,21 @@ namespace PIM_Mini_Tests_WPF.COMMS.CCP
 {
     class CCP : HardwareTest
     {
-        public CCP() : base("CCP", new HardwareTest[] { new TestTTL(), new TestRS232(), new TestRS485() })
+        public CCP() : base("CCP", new HardwareTest[] {
+            new TestRS232PoliteWrite(),
+            new TestRS232PoliteReceive(),
+            new TestRS232RudeWrite(),
+            new TestRS232RudeReceive(),
+            new TestRS485() })
         {
         }
 
-        internal void Check(HardwareTest caller)
+        internal void Check(HardwareTest caller, string name)
         {
             var status = caller.GetUserInput($"Is the PIM Mini ready for the CCP {caller.Name} test?");
             if (!caller.AssertEqual(true, status, "The user indicated that the test is not ready.")) return;
 
-            string message = $"{this.Name}_{caller.Name}";
+            string message = $"comms_{this.Name}_{name}";
             var result = Controller.SendTcpMessage(message);
             if (!caller.AssertEqual(result, DaemonResponse.Success, "")) return;
             caller.TestStatus = Status.Passed;

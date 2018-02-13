@@ -16,7 +16,7 @@ namespace PIM_Mini_Tests_WPF.COMMS.CCP
         public override void Test()
         {
             var parent = this._parent as CCP;
-            parent.Check(this);
+            parent.Check(this, "RS485");
         }
     }
 }

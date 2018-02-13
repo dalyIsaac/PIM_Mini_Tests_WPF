@@ -73,14 +73,18 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Common\Controller.cs" />
+    <Compile Include="COMMS\CCP\TestRS232RudeReceive.cs" />
+    <Compile Include="COMMS\CCP\TestRS232PoliteReceive.cs" />
+    <Compile Include="COMMS\CCP\TestRS232PoliteWrite.cs" />
     <Compile Include="COMMS\IED\IED.cs" />
-    <Compile Include="COMMS\IED\TestRS232.cs" />
+    <Compile Include="COMMS\IED\TestRS232PoliteReceive.cs" />
+    <Compile Include="COMMS\IED\TestRS232PoliteWrite.cs" />
+    <Compile Include="COMMS\IED\TestRS232RudeReceive.cs" />
+    <Compile Include="COMMS\IED\TestRS232RudeWrite.cs" />
     <Compile Include="COMMS\IED\TestRS485.cs" />
-    <Compile Include="COMMS\IED\TestTTL.cs" />
     <Compile Include="COMMS\CCP\CCP.cs" />
-    <Compile Include="COMMS\CCP\TestRS232.cs" />
+    <Compile Include="COMMS\CCP\TestRS232RudeWrite.cs" />
     <Compile Include="COMMS\CCP\TestRS485.cs" />
-    <Compile Include="COMMS\CCP\TestTTL.cs" />
     <Compile Include="COMMS\COMMS.cs" />
     <Compile Include="LEDS\LEDS.cs" />
     <Compile Include="LEDS\TestCcpDataRx.cs" />

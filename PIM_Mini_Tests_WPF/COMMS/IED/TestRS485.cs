@@ -16,7 +16,7 @@ namespace PIM_Mini_Tests_WPF.COMMS.IED
         public override void Test()
         {
             var parent = this._parent as IED;
-            parent.Check(this);
+            parent.Check(this, "RS485");
         }
     }
 }
