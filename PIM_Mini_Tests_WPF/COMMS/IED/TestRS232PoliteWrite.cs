@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace PIM_Mini_Tests_WPF.COMMS.IED
 {
-    public class TestRS485 : HardwareTest
+    public class TestRS232PoliteWrite : HardwareTest
     {
-        public TestRS485() : base("RS485")
+        public TestRS232PoliteWrite() : base("RS232 Write with CTS/RTS")
         {
         }
 
         public override void Test()
         {
             var parent = this._parent as IED;
-            parent.Check(this, "RS485");
+            parent.Check(this, "RS232_politeWrite");
         }
     }
 }

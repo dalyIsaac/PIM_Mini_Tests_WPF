@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace PIM_Mini_Tests_WPF.COMMS.IED
 {
-    public class TestTTL : HardwareTest
+    public class TestRS232PoliteReceive : HardwareTest
     {
-        public TestTTL() : base("TTL")
+        public TestRS232PoliteReceive() : base("RS232 Receive with CTS/RTS")
         {
         }
 
         public override void Test()
         {
             var parent = this._parent as IED;
-            parent.Check(this);
+            parent.Check(this, "RS232_politeReceive");
         }
     }
 }

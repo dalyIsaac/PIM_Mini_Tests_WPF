@@ -7,16 +7,16 @@ using System.Threading.Tasks;
 
 namespace PIM_Mini_Tests_WPF.COMMS.CCP
 {
-    public class TestRS232 : HardwareTest
+    public class TestRS232RudeReceive : HardwareTest
     {
-        public TestRS232() : base("RS232")
+        public TestRS232RudeReceive() : base("RS232 Receive without CTS/RTS")
         {
         }
 
         public override void Test()
         {
             var parent = this._parent as CCP;
-            parent.Check(this);
+            parent.Check(this, "RS232_rudeReceive");
         }
     }
 }

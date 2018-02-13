@@ -10,7 +10,7 @@ namespace PIM_Mini_Tests_WPF.COMMS
 {
     public class COMMS : HardwareTest
     {
-        public COMMS() : base("Comms", new HardwareTest[] { new CCP.CCP() })
+        public COMMS() : base("Comms", new HardwareTest[] { new CCP.CCP(), new IED.IED() })
         {
         }
 
