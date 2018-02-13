@@ -45,28 +45,24 @@ class SerialComms(object):
         """Tests that data can be written and read over RS-232 with no RTS/CTS handshaking"""
         self.logging.debug("RS-232 test write no RTS/CTS handshaking")
         self.writer.rts = False
-        self.writer.cts = False
         return self._test_write()
 
     def test_rs232_polite_write(self):
         """Tests that data can be written and read over RS-232 with RTS/CTS handshaking"""
         self.logging.debug("RS-232 test write with RTS/CTS handshaking")
         self.writer.rts = True
-        self.writer.cts = True
         return self._test_write()
 
     def test_rs232_rude_receive(self):
         """Tests that data can be written and read over RS-232 with no RTS/CTS handshaking"""
         self.logging.debug("RS-232 test receive with no RTS/CTS handshaking")
         self.writer.rts = False
-        self.writer.cts = False
-        return self._test_write()
+        return self._test_read()
 
     def test_rs232_polite_receive(self):
         """Tests that data can be written and read over RS-232 with RTS/CTS handshaking"""
         self.logging.debug("RS-232 test receive with no RTS/CTS handshaking")
         self.writer.rts = True
-        self.writer.cts = True
         return self._test_read()
 
     def test_rs485(self):
@@ -77,6 +73,13 @@ class SerialComms(object):
     def _test_write(self):
         """Tests that data can be written, and that the data read is equal"""
         try:
+            if (self.writer.rts is True):
+                self.logging.debug("Checking CTS")
+                if (self.writer.cts is False):
+                    self.logging.fatal("CTS is False")
+                    return
+                self.logging.debug("CTS is true")
+
             message = "Writing: " + TEST_STRING
             self.logging.debug(message)
             self.writer.open()
@@ -111,7 +114,15 @@ class SerialComms(object):
             self.logging.debug("Starting reader in another thread")
             pool = ThreadPool(processes=1)
             async_result = pool.apply_async(self._async_reader)
-            self.logging.debug("Writing value")
+
+            if (self.writer.rts is True):
+                self.logging.debug("Checking CTS")
+                if (self.writer.cts is False):
+                    self.logging.fatal("CTS is False")
+                    return
+                self.logging.debug("CTS is true")
+
+            message = "Writing: " + TEST_STRING
             self.writer.open()
             self.writer(TEST_STRING)
             self.writer.close()
