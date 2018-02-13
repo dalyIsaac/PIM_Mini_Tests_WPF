@@ -78,8 +78,8 @@ class SerialComms(object):
         """Tests that data can be written, and that the data read is equal"""
         try:
             message = "Writing: " + TEST_STRING
-            self.writer.open()
             self.logging.debug(message)
+            self.writer.open()
             self.writer.write(TEST_STRING)
             self.writer.close()
 
